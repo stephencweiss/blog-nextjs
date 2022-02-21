@@ -38,6 +38,7 @@ const PostPage: NextPage<Post> = (props) => {
 
 export function getServerSideProps(context: any) {
   const post = context?.query?.post;
+
   const specific = dict.get(post) ?? ({} as PostLookup);
 
   const file = fs.readFileSync(path.join(NOTES_PATH, specific?.fileName));
