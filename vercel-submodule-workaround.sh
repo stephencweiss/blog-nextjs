@@ -1,7 +1,7 @@
 # repo paths (supplied without the protocol prefix)
 MAIN_REPO=github.com/stephencweiss/blog-nextjs.git
 # the reference of the submodule in .gitmodules (usually the path)
-SUBMODULE_REF=content
+SUBMODULE_PATH=content
 if [ "$VERCEL_GIT_COMMIT_SHA" == "" ]; then
   echo "Error: VERCEL_GIT_COMMIT_SHA is empty"
   exit 1
