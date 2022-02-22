@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
+    "iron-session": "^6.0.5",
     "marked": "^4.0.12",
     "next": "12.1.0",
     "react": "17.0.2",
