@@ -46,8 +46,20 @@ export async function getStaticProps() {
     );
   }
 
-  const publicPosts = filterPrivate(filteredFiles, dict);
+  function filterPublished(files: string[], dictionary: Dictionary) {
+    return files.filter(
+      (file) =>
+        dictionary.has(file) &&
+        (dictionary.get(file)?.stage ?? "").toLowerCase() === "published"
+    );
+  }
 
+  const publicOnly = filterPrivate(filteredFiles, dict);
+  const publicPosts = filterPublished(filterPrivate(filteredFiles, dict), dict);
+  console.log({
+    publicLength: publicOnly.length,
+    published: publicPosts.length,
+  });
   const posts = await mapAsync(publicPosts, async (file) => ({
     frontmatter: await extractFrontmatter(file),
   }));
