@@ -1,12 +1,26 @@
 // pages/admin.tsx
 
 import { withIronSessionSsr } from "iron-session/next";
+import { Login } from "../components/Login";
+import { sessionOptions } from "../utils/withSession";
+
+function Page(props: any) {
+  return (
+    <>
+      <Login />
+      <code>
+        <pre>{JSON.stringify(props, null, 4)}</pre>
+      </code>
+    </>
+  );
+}
+export default Page;
 
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
     const user = req.session.user;
 
-    if (user.admin !== true) {
+    if (user?.admin !== true) {
       return {
         notFound: true,
       };
@@ -18,12 +32,5 @@ export const getServerSideProps = withIronSessionSsr(
       },
     };
   },
-  {
-    cookieName: "myapp_cookiename",
-    password: "complex_password_at_least_32_characters_long",
-    // secure: true should be used in production (HTTPS) but can't be used in development (HTTP)
-    cookieOptions: {
-      secure: process.env.NODE_ENV === "production",
-    },
-  }
+  sessionOptions
 );

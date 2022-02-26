@@ -15,7 +15,7 @@ export function Post({ post }: Props) {
 
       {/* <p>{post.frontmatter.excerpt}</p> */}
 
-      <Link href={`/${post.frontmatter.slug}`}>
+      <Link href={`/blog/${post.frontmatter.slug}`}>
         <a className="btn">Read More</a>
       </Link>
     </div>

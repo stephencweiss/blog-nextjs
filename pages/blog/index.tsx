@@ -1,26 +1,29 @@
-import type { NextPage } from "next";
+import type { NextPage, NextPageContext } from "next";
 import fs from "fs/promises";
-
+import { withIronSessionSsr } from "iron-session/next";
 import Head from "next/head";
-import { extractFrontmatter } from "../utils/extractFrontmatter";
-import { filterAsync, mapAsync } from "../utils/asyncArrayFunctions";
-import { NOTES_PATH } from "../constants";
-import { Post as PostType } from "../types/post";
-import { Post } from "../components/Post";
-import { fileFilter } from "../utils/fileFilter";
-import dictionary from "../dictionaries/fileNameDictionary.json";
-import { Dictionary, rebuildDictionary } from "../utils/rebuildDictionary";
-import { Login } from "../components/Login";
 
-const Home: NextPage<{ posts: PostType[] }> = ({ posts }) => {
+import { extractFrontmatter } from "../../utils/extractFrontmatter";
+import { filterAsync, mapAsync } from "../../utils/asyncArrayFunctions";
+import { NOTES_PATH } from "../../constants";
+import { Post as PostType } from "../../types/post";
+import { Post } from "../../components/Post";
+import { fileFilter } from "../../utils/fileFilter";
+import dictionary from "../../dictionaries/fileNameDictionary.json";
+import { Dictionary, rebuildDictionary } from "../../utils/rebuildDictionary";
+import { Login } from "../../components/Login";
+import { sessionOptions } from "../../utils/withSession";
+
+const Blog: NextPage<{ posts: PostType[] }> = ({ posts }) => {
   return (
     <div>
       <Head>
-        <title>Code Comments</title>
+        <title>Code Comments: Blog</title>
         <meta name="description" content="Notes on Life & Software" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <h1>Blog</h1>
         <Login />
         <>
           {posts.map((post: PostType) => (
@@ -32,9 +35,11 @@ const Home: NextPage<{ posts: PostType[] }> = ({ posts }) => {
   );
 };
 
-export default Home;
+export default Blog;
 
-export async function getStaticProps() {
+export const getServerSideProps = withIronSessionSsr(async function (
+  context: NextPageContext
+) {
   const dir = await fs.readdir(NOTES_PATH);
   const filteredFiles = await filterAsync(dir, (fileName) =>
     fileFilter(NOTES_PATH, fileName)
@@ -55,15 +60,17 @@ export async function getStaticProps() {
     );
   }
 
-  const publicOnly = filterPrivate(filteredFiles, dict);
-  const publicPosts = filterPublished(filterPrivate(filteredFiles, dict), dict);
-  console.log({
-    publicLength: publicOnly.length,
-    published: publicPosts.length,
-  });
+  const user = context?.req?.session?.user;
+
+  const publicPosts = filterPublished(
+    user?.admin !== true ? filterPrivate(filteredFiles, dict) : filteredFiles,
+    dict
+  );
+
   const posts = await mapAsync(publicPosts, async (file) => ({
     frontmatter: await extractFrontmatter(file),
   }));
 
   return { props: { posts } };
-}
+},
+sessionOptions);
