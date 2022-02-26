@@ -1,13 +1,13 @@
 // pages/admin.tsx
 
 import { withIronSessionSsr } from "iron-session/next";
-import { Login } from "../components/Login";
+import { NavBar } from "../components/NavBar";
 import { sessionOptions } from "../utils/withSession";
 
 function Page(props: any) {
   return (
     <>
-      <Login />
+      <NavBar />
       <code>
         <pre>{JSON.stringify(props, null, 4)}</pre>
       </code>

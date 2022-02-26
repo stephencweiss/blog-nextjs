@@ -11,7 +11,7 @@ import { Post } from "../../components/Post";
 import { fileFilter } from "../../utils/fileFilter";
 import dictionary from "../../dictionaries/fileNameDictionary.json";
 import { Dictionary, rebuildDictionary } from "../../utils/rebuildDictionary";
-import { Login } from "../../components/Login";
+import { NavBar } from "../../components/NavBar";
 import { sessionOptions } from "../../utils/withSession";
 
 const Blog: NextPage<{ posts: PostType[] }> = ({ posts }) => {
@@ -20,11 +20,11 @@ const Blog: NextPage<{ posts: PostType[] }> = ({ posts }) => {
       <Head>
         <title>Code Comments: Blog</title>
         <meta name="description" content="Notes on Life & Software" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/assets/initials.svg" />
       </Head>
       <main>
         <h1>Blog</h1>
-        <Login />
+        <NavBar />
         <>
           {posts.map((post: PostType) => (
             <Post key={post.frontmatter.slug} post={post} />

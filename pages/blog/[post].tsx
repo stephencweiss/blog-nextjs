@@ -16,6 +16,7 @@ import {
   rebuildDictionary,
 } from "../../utils/rebuildDictionary";
 import { sessionOptions } from "../../utils/withSession";
+import { NavBar } from "../../components/NavBar";
 
 const dict: Dictionary = rebuildDictionary(dictionary);
 const PostPage: NextPage<Post> = (props) => {
@@ -23,14 +24,12 @@ const PostPage: NextPage<Post> = (props) => {
   const { title, date } = frontmatter;
   return (
     <>
-      <Link href="/">
-        <a className="btn btn-back">Go Back</a>
-      </Link>
-      <div className="card card-page">
+      <NavBar />
+      <div>
         hello, world
-        <h1 className="post-title">{title}</h1>
-        <div className="post-date">Posted on {date}</div>
-        <div className="post-body">
+        <h1>{title}</h1>
+        <div>Posted on {date}</div>
+        <div>
           <div dangerouslySetInnerHTML={{ __html: marked(content) }}></div>
         </div>
       </div>
@@ -59,24 +58,5 @@ export const getServerSideProps = withIronSessionSsr(async function (
   return { props: { content, frontmatter: { ...frontmatter } } };
 },
 sessionOptions);
-
-// export const getServerSideProps = withIronSessionSsr(
-//   async function getServerSideProps({ req }) {
-//     const user = req.session.user;
-
-//     if (user?.admin !== true) {
-//       return {
-//         notFound: true,
-//       };
-//     }
-
-//     return {
-//       props: {
-//         user: req.session.user,
-//       },
-//     };
-//   },
-//   sessionOptions
-// );
 
 export default PostPage;

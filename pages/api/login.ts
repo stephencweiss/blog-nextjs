@@ -7,11 +7,20 @@ import { sessionOptions } from "../../utils/withSession";
 export default withIronSessionApiRoute(loginRoute, sessionOptions);
 
 async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
-  // get user from database then:
-  req.session.user = {
-    id: 230,
-    admin: true,
-  };
-  await req.session.save();
-  res.send({ ok: true });
+  if (req.method !== "POST") {
+    res.status(405).send({ message: "Only POST requests allowed" });
+    return;
+  }
+
+  const { password } = JSON.parse(req.body);
+
+  if (password === process.env.SECRET_COOKIE_PASSWORD) {
+    req.session.user = {
+      id: 230,
+      admin: true,
+    };
+    await req.session.save();
+    res.status(200).send({ ok: true });
+  }
+  res.status(401).send({ ok: false });
 }
