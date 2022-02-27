@@ -16,7 +16,8 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
 
   if (password === process.env.SECRET_COOKIE_PASSWORD) {
     req.session.user = {
-      id: 230,
+      isLoggedIn: true,
+      login: "yes",
       admin: true,
     };
     await req.session.save();

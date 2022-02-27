@@ -6,6 +6,7 @@ export type User = {
   isLoggedIn: boolean;
   login: string;
   avatarUrl?: string;
+  admin?: true;
 };
 
 export default withIronSessionApiRoute(userRoute, sessionOptions);

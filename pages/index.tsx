@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Post as PostType } from "../types/post";
@@ -13,14 +14,15 @@ const Home: NextPage<{ posts: PostType[] }> = () => {
         <link rel="icon" href="/assets/initials.svg" />
       </Head>
       <main>
-        <Link href={"/blog"}>
-          <img
-            style={{ height: "100px", objectFit: "contain" }}
+        <Link href={"/blog"} passHref>
+          <Image
+            height="100px"
+            objectFit="contain"
             src="/assets/initials.svg"
             alt={"logo of initials"}
           />
         </Link>
-        <Link href={"/blog"}>
+        <Link href={"/blog"} passHref>
           <h1>{"/* Code-Comments */"}</h1>
         </Link>
         <h2>Notes on Software and Life</h2>
