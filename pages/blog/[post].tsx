@@ -1,4 +1,11 @@
-import { NextApiRequest, NextPage, NextPageContext } from "next";
+import {
+  GetServerSidePropsContext,
+  GetServerSidePropsResult,
+  NextApiRequest,
+  NextPage,
+  NextPageContext,
+  PreviewData,
+} from "next";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
@@ -17,6 +24,7 @@ import {
 } from "../../utils/rebuildDictionary";
 import { sessionOptions } from "../../utils/withSession";
 import { NavBar } from "../../components/NavBar";
+import { NextParsedUrlQuery } from "next/dist/server/request-meta";
 
 const dict: Dictionary = rebuildDictionary(dictionary);
 const PostPage: NextPage<Post> = (props) => {
@@ -37,9 +45,18 @@ const PostPage: NextPage<Post> = (props) => {
   );
 };
 
-export const getServerSideProps = withIronSessionSsr(async function (
-  context: NextPageContext
-) {
+export const getServerSideProps = withIronSessionSsr(
+  wrappableServerSideProps,
+  sessionOptions
+);
+
+async function wrappableServerSideProps(
+  context: GetServerSidePropsContext<NextParsedUrlQuery, PreviewData>
+): Promise<
+  GetServerSidePropsResult<
+    { content: string; frontmatter: any } | { notFound: true }
+  >
+> {
   const { query, req } = context;
   const post = typeof query?.post === "string" ? query.post : "";
   const user = req?.session?.user;
@@ -56,7 +73,6 @@ export const getServerSideProps = withIronSessionSsr(async function (
   }
 
   return { props: { content, frontmatter: { ...frontmatter } } };
-},
-sessionOptions);
+}
 
 export default PostPage;

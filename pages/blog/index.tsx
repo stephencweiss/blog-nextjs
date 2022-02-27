@@ -1,4 +1,10 @@
-import type { NextPage, NextPageContext } from "next";
+import type {
+  GetServerSidePropsContext,
+  GetServerSidePropsResult,
+  NextPage,
+  NextPageContext,
+  PreviewData,
+} from "next";
 import fs from "fs/promises";
 import { withIronSessionSsr } from "iron-session/next";
 import Head from "next/head";
@@ -13,6 +19,7 @@ import dictionary from "../../dictionaries/fileNameDictionary.json";
 import { Dictionary, rebuildDictionary } from "../../utils/rebuildDictionary";
 import { NavBar } from "../../components/NavBar";
 import { sessionOptions } from "../../utils/withSession";
+import { NextParsedUrlQuery } from "next/dist/server/request-meta";
 
 const Blog: NextPage<{ posts: PostType[] }> = ({ posts }) => {
   return (
@@ -38,8 +45,8 @@ const Blog: NextPage<{ posts: PostType[] }> = ({ posts }) => {
 export default Blog;
 
 export const getServerSideProps = withIronSessionSsr(async function (
-  context: NextPageContext
-) {
+  context: GetServerSidePropsContext<NextParsedUrlQuery, PreviewData>
+): Promise<GetServerSidePropsResult<{ posts: { frontmatter: any }[] }>> {
   const dir = await fs.readdir(NOTES_PATH);
   const filteredFiles = await filterAsync(dir, (fileName) =>
     fileFilter(NOTES_PATH, fileName)
