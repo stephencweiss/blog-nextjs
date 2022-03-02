@@ -14,16 +14,18 @@ const Home: NextPage<{ posts: PostType[] }> = () => {
         <link rel="icon" href="/assets/initials.svg" />
       </Head>
       <main>
+        <Image
+          height="100px"
+          width="100px"
+          objectFit="contain"
+          src="/assets/initials.svg"
+          alt={"logo of initials"}
+        />
+
         <Link href={"/blog"} passHref>
-          <Image
-            height="100px"
-            objectFit="contain"
-            src="/assets/initials.svg"
-            alt={"logo of initials"}
-          />
-        </Link>
-        <Link href={"/blog"} passHref>
-          <h1>{"/* Code-Comments */"}</h1>
+          <a style={{ display: "block", fontSize: "2.5rem" }}>
+            {"/* Code-Comments */"}
+          </a>
         </Link>
         <h2>Notes on Software and Life</h2>
 
