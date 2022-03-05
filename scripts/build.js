@@ -14,10 +14,15 @@ const filePath = (fileName) => path.join(NOTES_PATH, fileName);
 
 function extractFrontmatter(fileName) {
   const fileData = fs.readFileSync(filePath(fileName), "utf-8");
+  function firstFourLines(file) {
+    file.excerpt = file.content.split("\n").slice(0, 4).join(" ");
+  }
+
   const {
     data: { private: privateKey, ...frontmatter },
     content,
-  } = matter(fileData);
+    excerpt,
+  } = matter(fileData, { excerpt: firstFourLines });
 
   const slug = createSlug(fileName, frontmatter);
   const isPublished = String(frontmatter?.stage)
@@ -29,6 +34,7 @@ function extractFrontmatter(fileName) {
     content,
     slug,
     fileName,
+    excerpt,
     isPrivate: privateKey || frontmatter.archived || !isPublished,
   };
 }
@@ -89,9 +95,23 @@ function buildDictionaries(data) {
   // const fullText = [];
 
   data.forEach(
-    ({ fileName, stage, isPrivate = false, slug, content, ...rest }) => {
-      slugDictionary.set(slug, { fileName, stage, slug, isPrivate });
-      fileNameDictionary.set(fileName, { fileName, stage, slug, isPrivate });
+    ({
+      fileName,
+      stage,
+      isPrivate = false,
+      slug,
+      content,
+      excerpt,
+      ...rest
+    }) => {
+      slugDictionary.set(slug, { fileName, stage, slug, isPrivate, excerpt });
+      fileNameDictionary.set(fileName, {
+        fileName,
+        stage,
+        slug,
+        isPrivate,
+        excerpt,
+      });
       // fullText.push({
       //   fileName,
       //   stage,
