@@ -16,7 +16,7 @@ import { Post } from "../../types/post";
 
 import { NOTES_PATH } from "../../constants";
 
-import dictionary from "../../dictionaries/slugDictionary.json";
+import dictionary from "../../public/resources/slugDictionary.json";
 import {
   Dictionary,
   PostLookup,

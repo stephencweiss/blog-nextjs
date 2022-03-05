@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const lunr = require("lunr");
 const matter = require("gray-matter");
 
 const NOTES_PATH = path.join(__dirname, "../", "content/notes");
@@ -36,52 +37,84 @@ function createSlug(fileName, frontmatter) {
   return frontmatter?.slug ?? fileName.replace(".md", "");
 }
 
-function buildDictionary(dictionary, dictionaryName) {
-  const dirPath = path.join(process.cwd(), "dictionaries");
+function writeToDisk(data, fileName) {
+  const dirPath = path.join(process.cwd(), "public/resources");
   try {
     fs.readdirSync(dirPath);
   } catch (e) {
     fs.mkdirSync(dirPath);
   }
 
-  console.log(dictionaryName, Array.isArray(dictionary));
-
-  const data = Array.isArray(dictionary)
-    ? JSON.stringify(dictionary)
-    : JSON.stringify([...dictionary.entries()]);
-
-  fs.writeFileSync(`${dirPath}/${dictionaryName}.json`, data, {
+  fs.writeFileSync(`${dirPath}/${fileName}.json`, JSON.stringify(data), {
     encoding: "utf-8",
   });
 }
 
-function buildDictionaries() {
+function buildSearchIndex(data) {
+  const privateSearchIdx = lunr(function () {
+    this.ref("slug");
+    this.field("fileName");
+    this.field("title");
+    this.field("slug");
+    this.field("tags");
+    this.field("category");
+    this.field("stage");
+    this.field("isPrivate");
+    this.field("content");
+
+    data.forEach((entry) => this.add(entry));
+  });
+
+  const publicSearchIdx = lunr(function () {
+    this.ref("slug");
+    this.field("fileName");
+    this.field("title");
+    this.field("slug");
+    this.field("tags");
+    this.field("category");
+    this.field("stage");
+    this.field("isPrivate");
+    this.field("content");
+
+    data.forEach((entry) => !entry.isPrivate && this.add(entry));
+  });
+
+  writeToDisk(publicSearchIdx, "publicSearchIdx");
+  writeToDisk(privateSearchIdx, "privateSearchIdx");
+}
+
+function buildDictionaries(data) {
   const slugDictionary = new Map();
   const fileNameDictionary = new Map();
-  const searchDictionary = [];
+  // const fullText = [];
 
-  const dir = fs.readdirSync(NOTES_PATH);
-
-  const files = dir.filter((fileName) => fileFilter(NOTES_PATH, fileName));
-  const extracted = files.map(extractFrontmatter);
-  extracted.forEach(
+  data.forEach(
     ({ fileName, stage, isPrivate = false, slug, content, ...rest }) => {
       slugDictionary.set(slug, { fileName, stage, slug, isPrivate });
       fileNameDictionary.set(fileName, { fileName, stage, slug, isPrivate });
-      searchDictionary.push({
-        fileName,
-        stage,
-        slug,
-        isPrivate,
-        content,
-        ...rest,
-      });
+      // fullText.push({
+      //   fileName,
+      //   stage,
+      //   slug,
+      //   isPrivate,
+      //   content,
+      //   ...rest,
+      // });
     }
   );
 
-  buildDictionary(slugDictionary, "slugDictionary");
-  buildDictionary(fileNameDictionary, "fileNameDictionary");
-  buildDictionary(searchDictionary, "searchDictionary");
+  writeToDisk([...slugDictionary.entries()], "slugDictionary");
+  writeToDisk([...fileNameDictionary.entries()], "fileNameDictionary");
+  // writeToDisk(fullText, "fullText");
 }
 
-buildDictionaries();
+function builder() {
+  const dir = fs.readdirSync(NOTES_PATH);
+  const files = dir.filter((fileName) => fileFilter(NOTES_PATH, fileName));
+  const extracted = files.map(extractFrontmatter);
+
+  buildDictionaries(extracted);
+  buildSearchIndex(extracted);
+}
+
+builder();
