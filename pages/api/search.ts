@@ -33,7 +33,7 @@ function searchHandler(req: NextApiRequest, res: NextApiResponse) {
     const searchIdx = req.session?.user?.admin ? privateIdx : publicIdx;
     const searchResults = searchIdx
       .search(qs)
-      .map((res) => slugDictionary.get(res.ref));
+      .map((res) => ({ score: res.score, ...slugDictionary.get(res.ref) }));
 
     res.json(searchResults);
   } catch (e) {
