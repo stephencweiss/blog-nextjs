@@ -57,31 +57,24 @@ function writeToDisk(data, fileName) {
 }
 
 function buildSearchIndex(data) {
+  const _searchFields = [
+    "fileName",
+    "title",
+    "slug",
+    "tags",
+    "category",
+    "stage",
+    "content",
+  ];
   const privateSearchIdx = lunr(function () {
     this.ref("slug");
-    this.field("fileName");
-    this.field("title");
-    this.field("slug");
-    this.field("tags");
-    this.field("category");
-    this.field("stage");
-    this.field("isPrivate");
-    this.field("content");
-
+    _searchFields.forEach((f) => this.field(f));
     data.forEach((entry) => this.add(entry));
   });
 
   const publicSearchIdx = lunr(function () {
     this.ref("slug");
-    this.field("fileName");
-    this.field("title");
-    this.field("slug");
-    this.field("tags");
-    this.field("category");
-    this.field("stage");
-    this.field("isPrivate");
-    this.field("content");
-
+    _searchFields.forEach((f) => this.field(f));
     data.forEach((entry) => !entry.isPrivate && this.add(entry));
   });
 
