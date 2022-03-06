@@ -4,7 +4,7 @@ export type PostLookup = {
   fileName: string;
   stage: string;
   slug: string;
-  private: boolean;
+  isPrivate: boolean;
 };
 
 export function rebuildDictionary(flattenedDictionary: any) {

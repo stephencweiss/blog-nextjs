@@ -15,7 +15,7 @@ import { NOTES_PATH } from "../../constants";
 import { Post as PostType } from "../../types/post";
 import { Post } from "../../components/Post";
 import { fileFilter } from "../../utils/fileFilter";
-import dictionary from "../../dictionaries/fileNameDictionary.json";
+import dictionary from "../../public/resources/fileNameDictionary.json";
 import { Dictionary, rebuildDictionary } from "../../utils/rebuildDictionary";
 import { NavBar } from "../../components/NavBar";
 import { sessionOptions } from "../../utils/withSession";
@@ -55,7 +55,7 @@ export const getServerSideProps = withIronSessionSsr(async function (
 
   function filterPrivate(files: string[], dictionary: Dictionary) {
     return files.filter(
-      (file) => dictionary.has(file) && !dictionary.get(file)?.private
+      (file) => dictionary.has(file) && !dictionary.get(file)?.isPrivate
     );
   }
 
