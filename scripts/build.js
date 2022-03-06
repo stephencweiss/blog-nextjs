@@ -102,14 +102,23 @@ function buildDictionaries(data) {
       slug,
       content,
       excerpt,
+      title,
       ...rest
     }) => {
-      slugDictionary.set(slug, { fileName, stage, slug, isPrivate, excerpt });
+      slugDictionary.set(slug, {
+        fileName,
+        stage,
+        slug,
+        isPrivate,
+        title,
+        excerpt,
+      });
       fileNameDictionary.set(fileName, {
         fileName,
         stage,
         slug,
         isPrivate,
+        title,
         excerpt,
       });
       // fullText.push({
