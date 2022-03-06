@@ -1,47 +1,14 @@
 const fs = require("fs");
 const path = require("path");
 const lunr = require("lunr");
-const matter = require("gray-matter");
+const { extractFrontmatter } = require("../utils/extractFrontmatter2");
 
-const NOTES_PATH = path.join(__dirname, "../", "content/notes");
+const NOTES_PATH = path.join(process.cwd(), "content/notes");
 
 const fileFilter = (parentDir, fileName) => {
   const fullPath = path.join(parentDir, fileName);
   return fs.statSync(fullPath).isFile();
 };
-
-const filePath = (fileName) => path.join(NOTES_PATH, fileName);
-
-function extractFrontmatter(fileName) {
-  const fileData = fs.readFileSync(filePath(fileName), "utf-8");
-  function firstFourLines(file) {
-    file.excerpt = file.content.split("\n").slice(0, 4).join(" ");
-  }
-
-  const {
-    data: { private: privateKey, ...frontmatter },
-    content,
-    excerpt,
-  } = matter(fileData, { excerpt: firstFourLines });
-
-  const slug = createSlug(fileName, frontmatter);
-  const isPublished = String(frontmatter?.stage)
-    .toLowerCase()
-    .includes("publish");
-
-  return {
-    ...frontmatter,
-    content,
-    slug,
-    fileName,
-    excerpt,
-    isPrivate: privateKey || frontmatter.archived || !isPublished,
-  };
-}
-
-function createSlug(fileName, frontmatter) {
-  return frontmatter?.slug ?? fileName.replace(".md", "");
-}
 
 function writeToDisk(data, fileName) {
   const dirPath = path.join(process.cwd(), "public/resources");
