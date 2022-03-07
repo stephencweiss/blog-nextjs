@@ -2,17 +2,16 @@ import type {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
   NextPage,
-  NextPageContext,
   PreviewData,
 } from "next";
 import fs from "fs/promises";
 import { withIronSessionSsr } from "iron-session/next";
 import Head from "next/head";
 
-import { extractFrontmatter } from "../../utils/extractFrontmatter";
+import { extractNoteData } from "../../utils/extractNoteData";
 import { filterAsync, mapAsync } from "../../utils/asyncArrayFunctions";
 import { NOTES_PATH } from "../../constants";
-import { Post as PostType } from "../../types/post";
+import { ExpandedNote } from "../../types/post";
 import { Post } from "../../components/Post";
 import { fileFilter } from "../../utils/fileFilter";
 import dictionary from "../../public/resources/fileNameDictionary.json";
@@ -21,7 +20,7 @@ import { NavBar } from "../../components/NavBar";
 import { sessionOptions } from "../../utils/withSession";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
 
-const Blog: NextPage<{ posts: PostType[] }> = ({ posts }) => {
+const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
   return (
     <div>
       <Head>
@@ -33,8 +32,8 @@ const Blog: NextPage<{ posts: PostType[] }> = ({ posts }) => {
         <h1>Blog</h1>
         <NavBar />
         <>
-          {posts.map((post: PostType) => (
-            <Post key={post.frontmatter.slug} post={post} />
+          {posts.map((post: ExpandedNote) => (
+            <Post key={post.slug} post={post} />
           ))}
         </>
       </main>
@@ -46,7 +45,7 @@ export default Blog;
 
 export const getServerSideProps = withIronSessionSsr(async function (
   context: GetServerSidePropsContext<NextParsedUrlQuery, PreviewData>
-): Promise<GetServerSidePropsResult<{ posts: { frontmatter: any }[] }>> {
+): Promise<GetServerSidePropsResult<{ posts: ExpandedNote[] }>> {
   const dir = await fs.readdir(NOTES_PATH);
   const filteredFiles = await filterAsync(dir, (fileName) =>
     fileFilter(NOTES_PATH, fileName)
@@ -74,9 +73,10 @@ export const getServerSideProps = withIronSessionSsr(async function (
     dict
   );
 
-  const posts = await mapAsync(publicPosts, async (file) => ({
-    frontmatter: await extractFrontmatter(file),
-  }));
+  const posts = await mapAsync(
+    publicPosts,
+    async (file) => await extractNoteData(file, true)
+  );
 
   return { props: { posts } };
 },

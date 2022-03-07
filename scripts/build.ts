@@ -1,49 +1,17 @@
+import { ExpandedNote } from "../types/post";
+
 const fs = require("fs");
 const path = require("path");
 const lunr = require("lunr");
-const matter = require("gray-matter");
+const { extractNoteData } = require("../utils/extractNoteData");
+import { NOTES_PATH } from "../constants";
 
-const NOTES_PATH = path.join(__dirname, "../", "content/notes");
-
-const fileFilter = (parentDir, fileName) => {
+const fileFilter = (parentDir: string, fileName: string): boolean => {
   const fullPath = path.join(parentDir, fileName);
   return fs.statSync(fullPath).isFile();
 };
 
-const filePath = (fileName) => path.join(NOTES_PATH, fileName);
-
-function extractFrontmatter(fileName) {
-  const fileData = fs.readFileSync(filePath(fileName), "utf-8");
-  function firstFourLines(file) {
-    file.excerpt = file.content.split("\n").slice(0, 4).join(" ");
-  }
-
-  const {
-    data: { private: privateKey, ...frontmatter },
-    content,
-    excerpt,
-  } = matter(fileData, { excerpt: firstFourLines });
-
-  const slug = createSlug(fileName, frontmatter);
-  const isPublished = String(frontmatter?.stage)
-    .toLowerCase()
-    .includes("publish");
-
-  return {
-    ...frontmatter,
-    content,
-    slug,
-    fileName,
-    excerpt,
-    isPrivate: privateKey || frontmatter.archived || !isPublished,
-  };
-}
-
-function createSlug(fileName, frontmatter) {
-  return frontmatter?.slug ?? fileName.replace(".md", "");
-}
-
-function writeToDisk(data, fileName) {
+function writeToDisk(data: any, fileName: string) {
   const dirPath = path.join(process.cwd(), "public/resources");
   try {
     fs.readdirSync(dirPath);
@@ -56,7 +24,8 @@ function writeToDisk(data, fileName) {
   });
 }
 
-function buildSearchIndex(data) {
+// function buildSearchIndex(data: ExpandedNote[]) {
+function buildSearchIndex(data: any[]) {
   const _searchFields = [
     "fileName",
     "title",
@@ -66,23 +35,32 @@ function buildSearchIndex(data) {
     "stage",
     "content",
   ];
-  const privateSearchIdx = lunr(function () {
-    this.ref("slug");
-    _searchFields.forEach((f) => this.field(f));
-    data.forEach((entry) => this.add(entry));
-  });
 
-  const publicSearchIdx = lunr(function () {
-    this.ref("slug");
-    _searchFields.forEach((f) => this.field(f));
-    data.forEach((entry) => !entry.isPrivate && this.add(entry));
-  });
+  function standardLunrBuilder() {
+    const builder = new lunr.Builder();
+    builder.pipeline.add(lunr.trimmer, lunr.stopWordFilter, lunr.stemmer);
+    builder.searchPipeline.add(lunr.stemmer);
+    return builder;
+  }
+
+  const configFn = (indexPrivate = false) => {
+    const builder = standardLunrBuilder();
+    builder.ref("slug");
+    _searchFields.forEach((f) => builder.field(f));
+    data.forEach(
+      (entry) => (indexPrivate ? true : !entry.isPrivate) && builder.add(entry)
+    );
+    return builder.build();
+  };
+
+  const privateSearchIdx = configFn(true);
+  const publicSearchIdx = configFn();
 
   writeToDisk(publicSearchIdx, "publicSearchIdx");
   writeToDisk(privateSearchIdx, "privateSearchIdx");
 }
 
-function buildDictionaries(data) {
+function buildDictionaries(data: ExpandedNote[]) {
   const slugDictionary = new Map();
   const fileNameDictionary = new Map();
   // const fullText = [];
@@ -132,11 +110,15 @@ function buildDictionaries(data) {
 
 function builder() {
   const dir = fs.readdirSync(NOTES_PATH);
-  const files = dir.filter((fileName) => fileFilter(NOTES_PATH, fileName));
-  const extracted = files.map(extractFrontmatter);
+  const files: string[] = dir.filter((fileName: string) =>
+    fileFilter(NOTES_PATH, fileName)
+  );
+  const extracted: ExpandedNote[] = files.map((f) => extractNoteData(f, true));
 
   buildDictionaries(extracted);
   buildSearchIndex(extracted);
 }
 
 builder();
+
+// export {};

@@ -1,18 +1,15 @@
 import {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
-  NextApiRequest,
   NextPage,
-  NextPageContext,
   PreviewData,
 } from "next";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { marked } from "marked";
-import Link from "next/link";
 import { withIronSessionSsr } from "iron-session/next";
-import { Post } from "../../types/post";
+import { ExpandedNote } from "../../types/post";
 
 import { NOTES_PATH } from "../../constants";
 
@@ -27,14 +24,12 @@ import { NavBar } from "../../components/NavBar";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
 
 const dict: Dictionary = rebuildDictionary(dictionary);
-const PostPage: NextPage<Post> = (props) => {
-  const { content, frontmatter } = props;
-  const { title, date } = frontmatter;
+const PostPage: NextPage<ExpandedNote> = (props) => {
+  const { content, title, date } = props;
   return (
     <>
       <NavBar />
       <div>
-        hello, world
         <h1>{title}</h1>
         <div>Posted on {date}</div>
         <div>

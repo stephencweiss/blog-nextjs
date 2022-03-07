@@ -3,9 +3,9 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Post as PostType } from "../types/post";
+import { ExpandedNote } from "../types/post";
 
-const Home: NextPage<{ posts: PostType[] }> = () => {
+const Home: NextPage<{ posts: ExpandedNote[] }> = () => {
   return (
     <div>
       <Head>
