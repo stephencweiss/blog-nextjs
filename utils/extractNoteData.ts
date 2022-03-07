@@ -4,12 +4,12 @@ const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
 const { createSlug } = require("./createSlug");
+import { NOTES_PATH } from "../constants";
 
 export function extractNoteData(
   fileName: string,
   includeExcerpt = false
 ): ExpandedNote {
-  const NOTES_PATH = path.join(process.cwd(), "content/notes");
   const filePath = (fileName: string) => path.join(NOTES_PATH, fileName);
   const fileData = fs.readFileSync(filePath(fileName), "utf-8");
   const firstFourLines = (file: any) => {

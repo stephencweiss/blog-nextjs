@@ -4,8 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const lunr = require("lunr");
 const { extractNoteData } = require("../utils/extractNoteData");
-
-const NOTES_PATH = path.join(process.cwd(), "content/notes");
+import { NOTES_PATH } from "../constants";
 
 const fileFilter = (parentDir: string, fileName: string): boolean => {
   const fullPath = path.join(parentDir, fileName);
