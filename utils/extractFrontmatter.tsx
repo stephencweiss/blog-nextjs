@@ -7,6 +7,7 @@ import { PostFrontmatter } from "../types/post";
 
 export const filePath = (fileName: string) => path.join(NOTES_PATH, fileName);
 
+// TODO: replace with standard extractFrontmatter function
 export async function extractFrontmatter(fileName: string) {
   const content = await fs.readFile(filePath(fileName), "utf-8");
   const { data: frontmatter } = matter(content);

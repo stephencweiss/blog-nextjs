@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "update:submodules": "git submodule update --remote",
-    "pre-build": "ts-node scripts/build.js"
+    "pre-build": "ts-node scripts/build.ts"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",

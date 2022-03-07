@@ -1,15 +1,26 @@
-export type Post = {
-  content?: any; // not sure what this is yet
-  frontmatter: PostFrontmatter;
+export type ExpandedNote = Note &
+  Frontmatter & {
+    slug: string;
+    fileName: string;
+  };
+
+type Note = {
+  content: string;
+  excerpt?: string;
 };
 
-export type PostFrontmatter = {
+export type Frontmatter = {
   title: string;
   date: string; // ISO timestamp
-  draft?: boolean | string; // get rid of this key!
-  fileName: string;
-  private?: true;
-  publish?: string;
+  isPrivate: true;
   slug: string;
-  stage: "draft" | "published" | "archived";
+} & (UnpublishedFrontmatter | PublishedFrontmatter);
+
+type UnpublishedFrontmatter = {
+  stage: "draft" | "archived";
+};
+
+type PublishedFrontmatter = {
+  stage: "published";
+  publish: string; // ISO timestamp
 };
