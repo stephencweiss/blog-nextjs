@@ -1,9 +1,9 @@
-import { ExpandedNote, Frontmatter } from "../types/post";
-
-const fs = require("fs");
-const path = require("path");
 const matter = require("gray-matter");
-const { createSlug } = require("./createSlug");
+
+import type { ExpandedNote, Frontmatter } from "../types/post";
+import fs from "fs";
+import path from "path";
+import { createSlug } from "./createSlug";
 import { isValidDate } from "./isValidDate";
 import { NOTES_PATH } from "../constants";
 
@@ -17,11 +17,12 @@ export function extractNoteData(
     file.excerpt = file.content.split("\n").slice(0, 4).join(" ");
   };
 
+  const matterOptions = includeExcerpt ? { excerpt: firstFourLines } : {};
   const {
     data: { private: privateKey, ...frontmatter },
     content,
     excerpt,
-  } = matter(fileData, { excerpt: includeExcerpt && firstFourLines });
+  } = matter(fileData, matterOptions);
 
   const slug = createSlug(fileName, frontmatter);
   const isPublished = String(frontmatter?.stage)
