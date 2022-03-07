@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
 const { createSlug } = require("./createSlug");
+import { isValidDate } from "./isValidDate";
 import { NOTES_PATH } from "../constants";
 
 export function extractNoteData(
@@ -37,9 +38,7 @@ export function extractNoteData(
   };
 }
 
-import { isValidDate } from "./isValidDate";
-
-export function convertFrontmatterDatesToStrings(
+function convertFrontmatterDatesToStrings(
   frontmatter: Frontmatter
 ): Frontmatter {
   let updated = [];
