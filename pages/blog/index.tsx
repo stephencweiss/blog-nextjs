@@ -19,6 +19,7 @@ import { Dictionary, rebuildDictionary } from "../../utils/rebuildDictionary";
 import { NavBar } from "../../components/NavBar";
 import { sessionOptions } from "../../utils/withSession";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
+import Search from "../../components/Search";
 
 const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
   return (
@@ -31,6 +32,7 @@ const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
       <main>
         <h1>Blog</h1>
         <NavBar />
+        <Search />
         <>
           {posts.map((post: ExpandedNote) => (
             <Post key={post.slug} post={post} />
