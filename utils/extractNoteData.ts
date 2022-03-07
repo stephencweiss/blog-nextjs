@@ -1,4 +1,4 @@
-import { ExpandedNote } from "../types/post";
+import { ExpandedNote, Frontmatter } from "../types/post";
 
 const fs = require("fs");
 const path = require("path");
@@ -28,11 +28,40 @@ export function extractNoteData(
     .includes("publish");
 
   return {
-    ...frontmatter,
+    ...convertFrontmatterDatesToStrings(frontmatter),
     content,
     slug,
     fileName,
     excerpt,
     isPrivate: privateKey || frontmatter.archived || !isPublished,
   };
+}
+
+import { isValidDate } from "./isValidDate";
+
+export function convertFrontmatterDatesToStrings(
+  frontmatter: Frontmatter
+): Frontmatter {
+  let updated = [];
+  if (Array.isArray(frontmatter.updated)) {
+    frontmatter.updated
+      .filter((x) => x)
+      .forEach((updt: string) => updated.push(convertDtToString(updt)));
+  } else if (frontmatter.updated) {
+    updated.push(convertDtToString(frontmatter.updated));
+  }
+
+  frontmatter.date = convertDtToString(frontmatter.date);
+
+  if (frontmatter.stage === "published") {
+    frontmatter.publish = convertDtToString(frontmatter.publish);
+  }
+
+  return { updated, ...frontmatter };
+}
+
+function convertDtToString(dt: string | Date) {
+  return isValidDate(dt)
+    ? new Date(dt).toISOString()
+    : new Date().toISOString();
 }

@@ -12,6 +12,7 @@ type Note = {
 export type Frontmatter = {
   title: string;
   date: string; // ISO timestamp
+  updated?: string | string[]; // ISO timestamp
   isPrivate: true;
   slug: string;
 } & (UnpublishedFrontmatter | PublishedFrontmatter);
