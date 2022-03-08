@@ -7,17 +7,36 @@ import { createSlug } from "./createSlug";
 import { isValidDate } from "./isValidDate";
 import { NOTES_PATH } from "../constants";
 
+const getComposedRegex = (flags: string, ...regexes: RegExp[]) =>
+  new RegExp(regexes.map((regex) => regex.source).join("|"), flags);
+
 export function extractNoteData(
   fileName: string,
   includeExcerpt = false
 ): ExpandedNote {
   const filePath = (fileName: string) => path.join(NOTES_PATH, fileName);
   const fileData = fs.readFileSync(filePath(fileName), "utf-8");
-  const firstFourLines = (file: any) => {
-    file.excerpt = file.content.split("\n").slice(0, 4).join(" ");
+  const cleanedFirstFourLines = (file: any) => {
+    const imagePattern = new RegExp(/(!\[.*\]\(.*\))/g);
+    const headerPattern = new RegExp(/(#+)/g);
+    const quotesPattern = new RegExp(/((^|\n)>\s)/g);
+    const pattern = getComposedRegex(
+      "g",
+      imagePattern,
+      headerPattern,
+      quotesPattern
+    );
+
+    file.excerpt = file.content
+      .replace(pattern, "")
+      .split("\n")
+      .slice(0, 4)
+      .join(" ");
   };
 
-  const matterOptions = includeExcerpt ? { excerpt: firstFourLines } : {};
+  const matterOptions = includeExcerpt
+    ? { excerpt: cleanedFirstFourLines }
+    : {};
   const {
     data: { private: privateKey, ...frontmatter },
     content,
