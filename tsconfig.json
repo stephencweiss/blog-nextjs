@@ -14,7 +14,13 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/pages/*": ["pages/*"],
+      "@/styles/*": ["styles/*"]
+    }
   },
   "ts-node": {
     "compilerOptions": {
@@ -27,5 +33,5 @@
     "**/*.tsx",
     "scripts/buildDictionary.tss"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "**/*.test.*"]
 }

@@ -3,9 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 
-import { ExpandedNote } from "../types/post";
-
-const Home: NextPage<{ posts: ExpandedNote[] }> = () => {
+const Home: NextPage<{}> = () => {
   return (
     <div>
       <Head>
@@ -14,6 +12,9 @@ const Home: NextPage<{ posts: ExpandedNote[] }> = () => {
         <link rel="icon" href="/assets/initials.svg" />
       </Head>
       <main>
+        <Link href={"/blog"} passHref>
+          <h1>Code Comments</h1>
+        </Link>
         <Image
           height="100px"
           width="100px"
@@ -28,17 +29,9 @@ const Home: NextPage<{ posts: ExpandedNote[] }> = () => {
           </a>
         </Link>
         <h2>Notes on Software and Life</h2>
-
         <p>
           <em>written by Stephen Weiss</em>
         </p>
-
-        {/* <Login />
-        <>
-          {posts.map((post: PostType) => (
-            <Post key={post.frontmatter.slug} post={post} />
-          ))}
-        </> */}
       </main>
     </div>
   );
