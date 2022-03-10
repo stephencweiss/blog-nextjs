@@ -11,7 +11,7 @@ import Head from "next/head";
 import { extractNoteData } from "../../utils/extractNoteData";
 import { filterAsync, mapAsync } from "../../utils/asyncArrayFunctions";
 import { NOTES_PATH } from "../../constants";
-import { ExpandedNote } from "../../types/post";
+import { ExpandedNote } from "../../types/note";
 import { Post } from "../../components/Post";
 import { fileFilter } from "../../utils/fileFilter";
 import dictionary from "../../public/resources/fileNameDictionary.json";

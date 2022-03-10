@@ -15,6 +15,8 @@ export type Frontmatter = {
   updated?: string | string[]; // ISO timestamp
   isPrivate: true;
   slug: string;
+  category?: [];
+  tags?: [];
 } & (UnpublishedFrontmatter | PublishedFrontmatter);
 
 type UnpublishedFrontmatter = {
