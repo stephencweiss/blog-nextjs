@@ -30,7 +30,7 @@ function buildSearchIndex(data: any[]) {
     "fileName",
     "title",
     "slug",
-    "tags",
+    "category",
     "category",
     "stage",
     "content",
@@ -63,6 +63,8 @@ function buildSearchIndex(data: any[]) {
 function buildDictionaries(data: ExpandedNote[]) {
   const slugDictionary = new Map();
   const fileNameDictionary = new Map();
+  const tagDictionary = new Map();
+  const categoryDictionary = new Map();
   // const fullText = [];
 
   data.forEach(
@@ -74,24 +76,35 @@ function buildDictionaries(data: ExpandedNote[]) {
       content,
       excerpt,
       title,
+      tags,
+      category,
       ...rest
     }) => {
-      slugDictionary.set(slug, {
-        fileName,
-        stage,
-        slug,
-        isPrivate,
-        title,
-        excerpt,
-      });
-      fileNameDictionary.set(fileName, {
-        fileName,
-        stage,
-        slug,
-        isPrivate,
-        title,
-        excerpt,
-      });
+      const baseEntry = { fileName, stage, slug, isPrivate, title, excerpt };
+
+      slugDictionary.set(slug, baseEntry);
+      fileNameDictionary.set(fileName, baseEntry);
+
+      if (tags?.length) {
+        tags.map((tag) => {
+          tagDictionary.set(
+            tag,
+            tagDictionary.has(tag)
+              ? [...tagDictionary.get(tag), { ...baseEntry, tags }]
+              : [baseEntry]
+          );
+        });
+      }
+      if (category?.length) {
+        category.map((c) => {
+          categoryDictionary.set(
+            c,
+            categoryDictionary.has(c)
+              ? [...categoryDictionary.get(c), { ...baseEntry, category }]
+              : [baseEntry]
+          );
+        });
+      }
       // fullText.push({
       //   fileName,
       //   stage,
@@ -105,6 +118,8 @@ function buildDictionaries(data: ExpandedNote[]) {
 
   writeToDisk([...slugDictionary.entries()], "slugDictionary");
   writeToDisk([...fileNameDictionary.entries()], "fileNameDictionary");
+  writeToDisk([...tagDictionary.entries()], "tagDictionary");
+  writeToDisk([...categoryDictionary.entries()], "categoryDictionary");
   // writeToDisk(fullText, "fullText");
 }
 
