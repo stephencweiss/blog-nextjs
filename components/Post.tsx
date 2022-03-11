@@ -1,7 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { ExpandedNote } from "../types/note";
-import { Card } from "./Card";
+import { Card, createPill } from "./Card";
 import { marked } from "marked";
 
 export type Props = {
@@ -9,18 +9,38 @@ export type Props = {
 };
 
 export function Post({ post }: Props) {
-  const { title, date, slug, excerpt } = post;
+  const { category, date, excerpt, isPrivate, slug, tags, title } = post;
 
+  const pills = [
+    ...[isPrivate && createPill({ text: "private", type: "isPrivate" })],
+    ...[...new Set(category ?? [])].map((c) =>
+      createPill({
+        text: c,
+        type: "category",
+        path: `/search?q=${c}&type=category`,
+      })
+    ),
+    ...[...new Set(tags ?? [])].map((t) =>
+      createPill({
+        text: t,
+        type: "tag",
+        path: `/search?q=${t}&type=tag`,
+      })
+    ),
+  ];
   return (
-    <Card
-      title={title}
-      subheader={`Posted on ${date}`}
-      details={marked(excerpt ?? "")}
-      primaryAction={
-        <Link href={`/blog/${slug}`}>
-          <a className="btn">Read More</a>
-        </Link>
-      }
-    />
+    <>
+      <Card
+        title={title}
+        subheader={`Posted on ${date}`}
+        details={marked(excerpt ?? "")}
+        pills={pills}
+        primaryAction={
+          <Link href={`/blog/${slug}`}>
+            <a className="btn">Read More</a>
+          </Link>
+        }
+      />
+    </>
   );
 }
