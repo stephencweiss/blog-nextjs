@@ -43,9 +43,12 @@ const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
   );
 };
 
-export default Blog;
+export const getServerSideProps = withIronSessionSsr(
+  wrappableServerSideProps,
+  sessionOptions
+);
 
-export const getServerSideProps = withIronSessionSsr(async function (
+async function wrappableServerSideProps(
   context: GetServerSidePropsContext<NextParsedUrlQuery, PreviewData>
 ): Promise<GetServerSidePropsResult<{ posts: ExpandedNote[] }>> {
   const dir = await fs.readdir(NOTES_PATH);
@@ -81,5 +84,6 @@ export const getServerSideProps = withIronSessionSsr(async function (
   );
 
   return { props: { posts } };
-},
-sessionOptions);
+}
+
+export default Blog;
