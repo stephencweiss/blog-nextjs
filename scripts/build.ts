@@ -1,4 +1,4 @@
-import { ExpandedNote } from "../types/note";
+import { ExpandedNote } from "../types/index";
 
 const fs = require("fs");
 const path = require("path");

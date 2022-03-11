@@ -6,20 +6,17 @@ import {
 } from "next";
 import { marked } from "marked";
 import { withIronSessionSsr } from "iron-session/next";
-import { ExpandedNote } from "../../types/note";
+import { ExpandedNote, CommonDictionaryEntry } from "../../types/index";
 
 import dictionary from "../../public/resources/slugDictionary.json";
-import {
-  Dictionary,
-  PostLookup,
-  rebuildDictionary,
-} from "../../utils/rebuildDictionary";
+import { isDictionary, reconstituteDictionary } from "../../utils";
 import { sessionOptions } from "../../utils/withSession";
 import { NavBar } from "../../components/NavBar";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
 import { extractNoteData } from "../../utils/extractNoteData";
 
-const dict: Dictionary = rebuildDictionary(dictionary);
+const dict = reconstituteDictionary(dictionary);
+
 const PostPage: NextPage<ExpandedNote> = (props) => {
   const { content, title, date } = props;
   return (
@@ -47,8 +44,8 @@ async function wrappableServerSideProps(
   const { query, req } = context;
   const post = typeof query?.post === "string" ? query.post : "";
   const user = req?.session?.user;
-
-  const specific = dict.get(post) ?? ({} as PostLookup);
+  if (!isDictionary(dict)) throw new Error("Check Dictionary reference");
+  const specific = dict.data.get(post) ?? ({} as CommonDictionaryEntry);
   const note = extractNoteData(specific.fileName);
 
   // if the post is private and the user isn't an admin, show 404

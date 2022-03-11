@@ -1,6 +1,6 @@
 const matter = require("gray-matter");
 
-import type { ExpandedNote, Frontmatter } from "../types/note";
+import type { ExpandedNote, Frontmatter } from "../types/index";
 import fs from "fs";
 import path from "path";
 import { createSlug } from "./createSlug";

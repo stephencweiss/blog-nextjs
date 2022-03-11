@@ -24,7 +24,7 @@ export function createPill({
   };
 }
 
-export type Props = {
+export type CardProps = {
   body?: string;
   details?: string;
   pills?: Pill[];
@@ -33,7 +33,7 @@ export type Props = {
   primaryAction?: React.ReactNode;
 };
 
-export function Card(props: Props) {
+export function Card(props: CardProps) {
   const { body, details, pills, subheader, title, primaryAction } = props;
 
   return (
@@ -43,6 +43,7 @@ export function Card(props: Props) {
       {pills?.length ? (
         <ul className="pills">
           {pills.map((pill) => {
+            console.log({ pill });
             const renderedPill = pill.path ? (
               <Link href={pill.path}>{pill.component}</Link>
             ) : (

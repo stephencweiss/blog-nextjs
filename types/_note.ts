@@ -4,6 +4,11 @@ export type ExpandedNote = Note &
     fileName: string;
   };
 
+export type CommonDictionaryEntry = Pick<
+  ExpandedNote,
+  "fileName" | "stage" | "slug" | "isPrivate" | "title" | "excerpt"
+>;
+
 type Note = {
   content: string;
   excerpt?: string;

@@ -5,9 +5,10 @@ import path from "path";
 import { withIronSessionApiRoute } from "iron-session/next";
 import dictionary from "../../public/resources/slugDictionary.json";
 import { sessionOptions } from "../../utils/withSession";
-import { rebuildDictionary } from "../../utils/rebuildDictionary";
+import { reconstituteDictionary } from "../../utils/rebuildDictionary";
+import { canViewPrivateNotes } from "utils/userPermissionFunctions";
 
-const slugDictionary = rebuildDictionary(dictionary);
+const slugDictionary = reconstituteDictionary(dictionary);
 
 const readPublicResource = (fileName: string) =>
   fs.readFileSync(path.join(process.cwd(), "public/resources", fileName), {
@@ -30,10 +31,15 @@ function searchHandler(req: NextApiRequest, res: NextApiResponse) {
     }
     res.status(200);
     res.setHeader("Content-Type", "application/json");
-    const searchIdx = req.session?.user?.admin ? privateIdx : publicIdx;
+    const searchIdx = canViewPrivateNotes(req.session?.user)
+      ? privateIdx
+      : publicIdx;
     const searchResults = searchIdx
       .search(qs)
-      .map((res) => ({ score: res.score, ...slugDictionary.get(res.ref) }));
+      .map((res) => ({
+        score: res.score,
+        ...slugDictionary.data.get(res.ref),
+      }));
 
     res.json(searchResults);
   } catch (e) {

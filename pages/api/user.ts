@@ -1,13 +1,7 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
+import { User } from "../../types/index";
 import { sessionOptions } from "../../utils/withSession";
-
-export type User = {
-  isLoggedIn: boolean;
-  login: string;
-  avatarUrl?: string;
-  admin?: true;
-};
 
 export default withIronSessionApiRoute(userRoute, sessionOptions);
 

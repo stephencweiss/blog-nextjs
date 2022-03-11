@@ -4,22 +4,19 @@ import type {
   NextPage,
   PreviewData,
 } from "next";
-import fs from "fs/promises";
-import { withIronSessionSsr } from "iron-session/next";
-import Head from "next/head";
 
-import { extractNoteData } from "../../utils/extractNoteData";
-import { filterAsync, mapAsync } from "../../utils/asyncArrayFunctions";
-import { NOTES_PATH } from "../../constants";
-import { ExpandedNote } from "../../types/note";
-import { Post } from "../../components/Post";
-import { fileFilter } from "../../utils/fileFilter";
-import dictionary from "../../public/resources/fileNameDictionary.json";
-import { Dictionary, rebuildDictionary } from "../../utils/rebuildDictionary";
-import { NavBar } from "../../components/NavBar";
-import { sessionOptions } from "../../utils/withSession";
+import { withIronSessionSsr } from "iron-session/next";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
-import Search from "../../components/Search";
+import Head from "next/head";
+import dictionary from "../../public/resources/fileNameDictionary.json";
+import { NavBar, Search, Post } from "../../components";
+import { ExpandedNote } from "../../types/index";
+import {
+  mapAsync,
+  extractNoteData,
+  sessionOptions,
+  getVisiblePosts,
+} from "../../utils";
 
 const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
   return (
@@ -51,35 +48,12 @@ export const getServerSideProps = withIronSessionSsr(
 async function wrappableServerSideProps(
   context: GetServerSidePropsContext<NextParsedUrlQuery, PreviewData>
 ): Promise<GetServerSidePropsResult<{ posts: ExpandedNote[] }>> {
-  const dir = await fs.readdir(NOTES_PATH);
-  const filteredFiles = await filterAsync(dir, (fileName) =>
-    fileFilter(NOTES_PATH, fileName)
-  );
-  const dict: Dictionary = rebuildDictionary(dictionary);
-
-  function filterPrivate(files: string[], dictionary: Dictionary) {
-    return files.filter(
-      (file) => dictionary.has(file) && !dictionary.get(file)?.isPrivate
-    );
-  }
-
-  function filterPublished(files: string[], dictionary: Dictionary) {
-    return files.filter(
-      (file) =>
-        dictionary.has(file) &&
-        (dictionary.get(file)?.stage ?? "").toLowerCase() === "published"
-    );
-  }
-
   const user = context?.req?.session?.user;
 
-  const publicPosts = filterPublished(
-    user?.admin !== true ? filterPrivate(filteredFiles, dict) : filteredFiles,
-    dict
-  );
+  const visiblePosts = await getVisiblePosts(dictionary, user);
 
   const posts = await mapAsync(
-    publicPosts,
+    visiblePosts,
     async (file) => await extractNoteData(file, true)
   );
 

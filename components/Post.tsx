@@ -1,14 +1,14 @@
 import * as React from "react";
 import Link from "next/link";
-import { ExpandedNote } from "../types/note";
+import { ExpandedNote } from "../types/_note";
 import { Card, createPill } from "./Card";
 import { marked } from "marked";
 
-export type Props = {
+export type PostProps = {
   post: ExpandedNote;
 };
 
-export function Post({ post }: Props) {
+export function Post({ post }: PostProps) {
   const { category, date, excerpt, isPrivate, slug, tags, title } = post;
 
   const pills = [
@@ -17,14 +17,14 @@ export function Post({ post }: Props) {
       createPill({
         text: c,
         type: "category",
-        path: `/search?q=${c}&type=category`,
+        path: `/search?q=${c}&type=search&target=category`,
       })
     ),
     ...[...new Set(tags ?? [])].map((t) =>
       createPill({
         text: t,
         type: "tag",
-        path: `/search?q=${t}&type=tag`,
+        path: `/search?q=${t}&type=search&target=tag`,
       })
     ),
   ];
