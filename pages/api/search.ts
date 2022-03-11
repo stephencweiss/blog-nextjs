@@ -22,7 +22,7 @@ var privateIdx = lunr.Index.load(privateData);
 
 function searchHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const qs = req?.query?.query;
+    const qs = req?.query?.q;
     if (Array.isArray(qs)) {
       res.status(400);
       res.send({ message: "Query should be strings only" });

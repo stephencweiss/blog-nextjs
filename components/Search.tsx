@@ -3,7 +3,7 @@ import Link from "next/link";
 import styles from "./Search.module.css";
 import { Card } from "./Card";
 
-const searchEndpoint = (query: string) => `/api/search?query=${query}`;
+const searchEndpoint = (query: string) => `/api/search?q=${query}&type=search`;
 
 export default function Search() {
   const searchRef = useRef(null);
