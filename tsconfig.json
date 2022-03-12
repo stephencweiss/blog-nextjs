@@ -17,11 +17,14 @@
     "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {
+      "@/*": ["./*"],
       "@/components/*": ["components/*"],
+      "@/constants": ["constants"],
       "@/features/*": ["features/*"],
       "@/layout/*": ["layout/*"],
       "@/pages/*": ["pages/*"],
-      "@/styles/*": ["styles/*"]
+      "@/styles/*": ["styles/*"],
+      "@/types/*": ["types/*"]
     }
   },
   "ts-node": {
