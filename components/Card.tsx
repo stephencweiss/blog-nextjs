@@ -1,33 +1,11 @@
 import Link from "next/link";
 import * as React from "react";
-
-export type Pill = {
-  id: string;
-  path?: string;
-  component: React.ReactElement;
-};
-
-export function createPill({
-  text,
-  type,
-  path,
-}: {
-  text: string;
-  type: string;
-  path?: string;
-}): Pill {
-  const Component = path ? `a` : `div`;
-  return {
-    id: `${type}-${text}`,
-    path,
-    component: <Component className={`pill ${type}`}>{text}</Component>,
-  };
-}
+import { Pill, PillProps } from "./Pill";
 
 export type CardProps = {
   body?: string;
   details?: string;
-  pills?: Pill[];
+  pills?: PillProps[];
   date?: string;
   title: string;
   primaryAction?: React.ReactNode;
@@ -42,19 +20,9 @@ export function Card(props: CardProps) {
       <h3>{title}</h3>
       {pills?.length ? (
         <ul className="pills">
-          {pills.map((pill) => {
-            const renderedPill = pill.path ? (
-              <Link href={pill.path}>{pill.component}</Link>
-            ) : (
-              <>{pill.component}</>
-            );
-
-            return (
-              <li className="pill-item" key={pill.id}>
-                {renderedPill}
-              </li>
-            );
-          })}
+          {pills.map((pill) => (
+            <Pill key={pill.id} {...pill} />
+          ))}
         </ul>
       ) : (
         <></>

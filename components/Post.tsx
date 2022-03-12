@@ -1,7 +1,8 @@
 import * as React from "react";
 import Link from "next/link";
 import { ExpandedNote } from "../types/_note";
-import { Card, createPill } from "./Card";
+import { Card } from "./Card";
+import { createPill } from "./Pill";
 import { marked } from "marked";
 
 export type PostProps = {
@@ -28,6 +29,7 @@ export function Post({ post }: PostProps) {
       })
     ),
   ];
+
   return (
     <>
       <Card
