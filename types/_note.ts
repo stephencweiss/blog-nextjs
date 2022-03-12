@@ -6,8 +6,8 @@ export type ExpandedNote = Note &
 
 export type CommonDictionaryEntry = Pick<
   ExpandedNote,
-  "date" | "fileName" | "stage" | "slug" | "isPrivate" | "title" | "excerpt"
->;
+  "date" | "fileName" | "stage" | "slug" | "title" | "excerpt"
+> & { isPrivate: boolean };
 
 type Note = {
   content: string;

@@ -1,4 +1,4 @@
-import { ExpandedNote } from "../types/index";
+import { CommonDictionaryEntry, ExpandedNote } from "../types/index";
 
 const fs = require("fs");
 const path = require("path");
@@ -60,11 +60,24 @@ function buildSearchIndex(data: any[]) {
   writeToDisk(privateSearchIdx, "privateSearchIdx");
 }
 
+type VisibilityCount = {
+  totalCount: number;
+  publicCount: number;
+};
+
+type TagDictionaryEntry = (CommonDictionaryEntry & { tags: string[] })[];
+type CategoryDictionaryEntry = (CommonDictionaryEntry & {
+  category: string[];
+})[];
+
 function buildDictionaries(data: ExpandedNote[]) {
-  const slugDictionary = new Map();
-  const fileNameDictionary = new Map();
-  const tagDictionary = new Map();
-  const categoryDictionary = new Map();
+  const slugDictionary = new Map<string, CommonDictionaryEntry>();
+  const fileNameDictionary = new Map<string, CommonDictionaryEntry>();
+
+  const tagDictionary = new Map<string, TagDictionaryEntry[]>();
+  const tagVisiblityDictionary = new Map<string, VisibilityCount>();
+  const categoryDictionary = new Map<string, CategoryDictionaryEntry[]>();
+  const categoryVisbilityDictionary = new Map<string, VisibilityCount>();
   // const fullText = [];
 
   data.forEach(
@@ -81,7 +94,7 @@ function buildDictionaries(data: ExpandedNote[]) {
       date,
       ...rest
     }) => {
-      const baseEntry = {
+      const baseEntry: CommonDictionaryEntry = {
         date,
         fileName,
         stage,
@@ -96,22 +109,48 @@ function buildDictionaries(data: ExpandedNote[]) {
 
       if (tags?.length) {
         tags.map((tag) => {
-          tagDictionary.set(
-            tag,
-            tagDictionary.has(tag)
-              ? [...tagDictionary.get(tag), { ...baseEntry, tags }]
-              : [baseEntry]
-          );
+          // tagDictionary
+          const curVal = {
+            ...baseEntry,
+            tags,
+          } as unknown as TagDictionaryEntry;
+
+          const newVal = [...(tagDictionary.get(tag) ?? []), curVal];
+
+          tagDictionary.set(tag, newVal);
+
+          const curEntry: VisibilityCount = tagVisiblityDictionary.get(tag) ?? {
+            totalCount: 0,
+            publicCount: 0,
+          };
+          curEntry.totalCount += 1;
+          if (!baseEntry.isPrivate) curEntry.publicCount += 1;
+          tagVisiblityDictionary.set(tag, curEntry);
         });
       }
       if (category?.length) {
         category.map((c) => {
-          categoryDictionary.set(
-            c,
-            categoryDictionary.has(c)
-              ? [...categoryDictionary.get(c), { ...baseEntry, category }]
-              : [baseEntry]
-          );
+          const curVal = {
+            ...baseEntry,
+            category,
+          } as unknown as CategoryDictionaryEntry;
+
+          const newVal: CategoryDictionaryEntry[] = [
+            ...(categoryDictionary.get(c) ?? []),
+            curVal,
+          ];
+
+          categoryDictionary.set(c, newVal);
+
+          const curEntry: VisibilityCount = categoryVisbilityDictionary.get(
+            c
+          ) ?? {
+            totalCount: 0,
+            publicCount: 0,
+          };
+          curEntry.totalCount += 1;
+          if (!baseEntry.isPrivate) curEntry.publicCount += 1;
+          categoryVisbilityDictionary.set(c, curEntry);
         });
       }
       // fullText.push({
@@ -127,8 +166,13 @@ function buildDictionaries(data: ExpandedNote[]) {
 
   writeToDisk([...slugDictionary.entries()], "slugDictionary");
   writeToDisk([...fileNameDictionary.entries()], "fileNameDictionary");
-  writeToDisk([...tagDictionary.entries()], "tagDictionary");
   writeToDisk([...categoryDictionary.entries()], "categoryDictionary");
+  writeToDisk(
+    [...categoryVisbilityDictionary.entries()],
+    "categorySearchDictionary"
+  );
+  writeToDisk([...tagDictionary.entries()], "tagDictionary");
+  writeToDisk([...tagVisiblityDictionary.entries()], "tagSearchDictionary");
   // writeToDisk(fullText, "fullText");
 }
 
