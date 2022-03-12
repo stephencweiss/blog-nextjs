@@ -78,9 +78,18 @@ function buildDictionaries(data: ExpandedNote[]) {
       title,
       tags,
       category,
+      date,
       ...rest
     }) => {
-      const baseEntry = { fileName, stage, slug, isPrivate, title, excerpt };
+      const baseEntry = {
+        date,
+        fileName,
+        stage,
+        slug,
+        isPrivate,
+        title,
+        excerpt,
+      };
 
       slugDictionary.set(slug, baseEntry);
       fileNameDictionary.set(fileName, baseEntry);

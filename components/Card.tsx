@@ -28,22 +28,21 @@ export type CardProps = {
   body?: string;
   details?: string;
   pills?: Pill[];
-  subheader?: string;
+  date?: string;
   title: string;
   primaryAction?: React.ReactNode;
 };
 
 export function Card(props: CardProps) {
-  const { body, details, pills, subheader, title, primaryAction } = props;
+  const { body, details, pills, date, title, primaryAction } = props;
 
   return (
     <div className="card">
-      <div className="post-date">{subheader}</div>
+      <div className="post-date">{date}</div>
       <h3>{title}</h3>
       {pills?.length ? (
         <ul className="pills">
           {pills.map((pill) => {
-            console.log({ pill });
             const renderedPill = pill.path ? (
               <Link href={pill.path}>{pill.component}</Link>
             ) : (

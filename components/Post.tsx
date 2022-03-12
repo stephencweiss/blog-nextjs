@@ -32,7 +32,7 @@ export function Post({ post }: PostProps) {
     <>
       <Card
         title={title}
-        subheader={`Posted on ${date}`}
+        date={date ? `Posted on ${date}` : ""}
         details={marked(excerpt ?? "")}
         pills={pills}
         primaryAction={

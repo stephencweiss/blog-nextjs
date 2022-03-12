@@ -6,7 +6,7 @@ export type ExpandedNote = Note &
 
 export type CommonDictionaryEntry = Pick<
   ExpandedNote,
-  "fileName" | "stage" | "slug" | "isPrivate" | "title" | "excerpt"
+  "date" | "fileName" | "stage" | "slug" | "isPrivate" | "title" | "excerpt"
 >;
 
 type Note = {

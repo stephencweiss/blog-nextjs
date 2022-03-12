@@ -52,12 +52,12 @@ export function Search() {
       {active && results?.length > 0 && (
         <ul className={styles.results}>
           {results.map((res) => {
-            const { slug, title, excerpt } = res;
-
+            const { date, slug, title, excerpt } = res;
             return (
               <li className={styles.result} key={slug}>
                 <Card
                   title={title}
+                  date={date ? `Posted on ${date}` : ""}
                   details={excerpt}
                   primaryAction={
                     <Link href={`/blog/${slug}`}>
