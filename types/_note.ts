@@ -4,6 +4,13 @@ export type ExpandedNote = Note &
     fileName: string;
   };
 
+export type VisibilityCount = {
+  totalCount: number;
+  publicCount: number;
+};
+
+export type CollectionEntry<T> = CommonDictionaryEntry & { collection: T[] };
+
 export type CommonDictionaryEntry = Pick<
   ExpandedNote,
   "date" | "fileName" | "stage" | "slug" | "title" | "excerpt"

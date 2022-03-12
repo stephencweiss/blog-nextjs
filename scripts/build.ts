@@ -1,9 +1,13 @@
-import { CommonDictionaryEntry, ExpandedNote } from "../types/index";
-
 const fs = require("fs");
 const path = require("path");
 const lunr = require("lunr");
 const { extractNoteData } = require("../utils/extractNoteData");
+import {
+  CollectionEntry,
+  CommonDictionaryEntry,
+  ExpandedNote,
+  VisibilityCount,
+} from "../types/index";
 import { NOTES_PATH } from "../constants";
 
 const fileFilter = (parentDir: string, fileName: string): boolean => {
@@ -24,8 +28,7 @@ function writeToDisk(data: any, fileName: string) {
   });
 }
 
-// function buildSearchIndex(data: ExpandedNote[]) {
-function buildSearchIndex(data: any[]) {
+function buildSearchIndex(data: ExpandedNote[]) {
   const _searchFields = [
     "fileName",
     "title",
@@ -60,23 +63,39 @@ function buildSearchIndex(data: any[]) {
   writeToDisk(privateSearchIdx, "privateSearchIdx");
 }
 
-type VisibilityCount = {
-  totalCount: number;
-  publicCount: number;
-};
+function addUpdateEntry<T extends string>(
+  collection: T[],
+  baseEntry: CommonDictionaryEntry,
+  basicDictionary: Map<string, CollectionEntry<T>[]>,
+  visibilityDictionary: Map<string, VisibilityCount>
+) {
+  collection.map((entry) => {
+    const curVal: CollectionEntry<T> = {
+      ...baseEntry,
+      collection,
+    };
 
-type TagDictionaryEntry = (CommonDictionaryEntry & { tags: string[] })[];
-type CategoryDictionaryEntry = (CommonDictionaryEntry & {
-  category: string[];
-})[];
+    const newVal = [...(basicDictionary.get(entry) ?? []), curVal];
+
+    basicDictionary.set(entry, newVal);
+
+    const curEntry: VisibilityCount = visibilityDictionary.get(entry) ?? {
+      totalCount: 0,
+      publicCount: 0,
+    };
+    curEntry.totalCount += 1;
+    if (!baseEntry.isPrivate) curEntry.publicCount += 1;
+    visibilityDictionary.set(entry, curEntry);
+  });
+}
 
 function buildDictionaries(data: ExpandedNote[]) {
   const slugDictionary = new Map<string, CommonDictionaryEntry>();
   const fileNameDictionary = new Map<string, CommonDictionaryEntry>();
 
-  const tagDictionary = new Map<string, TagDictionaryEntry[]>();
+  const tagDictionary = new Map<string, CollectionEntry<string>[]>();
   const tagVisiblityDictionary = new Map<string, VisibilityCount>();
-  const categoryDictionary = new Map<string, CategoryDictionaryEntry[]>();
+  const categoryDictionary = new Map<string, CollectionEntry<string>[]>();
   const categoryVisbilityDictionary = new Map<string, VisibilityCount>();
   // const fullText = [];
 
@@ -108,50 +127,15 @@ function buildDictionaries(data: ExpandedNote[]) {
       fileNameDictionary.set(fileName, baseEntry);
 
       if (tags?.length) {
-        tags.map((tag) => {
-          // tagDictionary
-          const curVal = {
-            ...baseEntry,
-            tags,
-          } as unknown as TagDictionaryEntry;
-
-          const newVal = [...(tagDictionary.get(tag) ?? []), curVal];
-
-          tagDictionary.set(tag, newVal);
-
-          const curEntry: VisibilityCount = tagVisiblityDictionary.get(tag) ?? {
-            totalCount: 0,
-            publicCount: 0,
-          };
-          curEntry.totalCount += 1;
-          if (!baseEntry.isPrivate) curEntry.publicCount += 1;
-          tagVisiblityDictionary.set(tag, curEntry);
-        });
+        addUpdateEntry(tags, baseEntry, tagDictionary, tagVisiblityDictionary);
       }
       if (category?.length) {
-        category.map((c) => {
-          const curVal = {
-            ...baseEntry,
-            category,
-          } as unknown as CategoryDictionaryEntry;
-
-          const newVal: CategoryDictionaryEntry[] = [
-            ...(categoryDictionary.get(c) ?? []),
-            curVal,
-          ];
-
-          categoryDictionary.set(c, newVal);
-
-          const curEntry: VisibilityCount = categoryVisbilityDictionary.get(
-            c
-          ) ?? {
-            totalCount: 0,
-            publicCount: 0,
-          };
-          curEntry.totalCount += 1;
-          if (!baseEntry.isPrivate) curEntry.publicCount += 1;
-          categoryVisbilityDictionary.set(c, curEntry);
-        });
+        addUpdateEntry(
+          category,
+          baseEntry,
+          categoryDictionary,
+          categoryVisbilityDictionary
+        );
       }
       // fullText.push({
       //   fileName,
