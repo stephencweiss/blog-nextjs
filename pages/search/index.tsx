@@ -12,20 +12,25 @@ import {
   removeUndefined,
   sessionOptions,
 } from "../../utils";
-import { CommonDictionaryEntry } from "../../types/index";
-import { NavBar, Post, Search } from "../../components";
 
+import { Card, createPill, NavBar, Post, Search } from "../../components";
 import {
-  ExpandedNote,
+  CollectionEntry,
+  CommonDictionaryEntry,
   SearchQuery,
   User,
   isSearchQuery,
   selectMetaFilterDictionary,
 } from "../../types/index";
 import { canViewPrivateNotes } from "utils/userPermissionFunctions";
+import { marked } from "marked";
+import Link from "next/link";
 
-type SearchResult = ExpandedNote;
+type SearchResult = CollectionEntry<string>;
 const SearchPage: NextPage<{ query: SearchResult[] }> = ({ query }) => {
+  // - [] Add search results
+  // - [] Add sort functionality (a-z, z-a)
+  // - [] remove search bar?
   return (
     <div>
       <Head>
@@ -39,9 +44,31 @@ const SearchPage: NextPage<{ query: SearchResult[] }> = ({ query }) => {
         <NavBar />
         <Search />
         <>
-          {query.map((post: any) => (
-            <Post key={post.slug} post={post} />
-          ))}
+          {query.map((entry) => {
+            const { title, collection, date, excerpt, slug } = entry;
+            const pills = collection.map((entry) =>
+              createPill({
+                text: entry,
+                type: "tag",
+                path: `/search?q=${entry}&type=search&target=tag`,
+              })
+            );
+            return (
+              <>
+                <Card
+                  title={title}
+                  date={date ? `Posted on ${date}` : ""}
+                  details={marked(excerpt ?? "")}
+                  pills={pills}
+                  primaryAction={
+                    <Link href={`/blog/${slug}`}>
+                      <a className="btn">Read More</a>
+                    </Link>
+                  }
+                />
+              </>
+            );
+          })}
         </>
       </main>
     </div>
