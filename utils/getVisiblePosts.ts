@@ -37,8 +37,8 @@ export async function getVisiblePosts(dictionary: any, user?: User) {
 
   const visiblePosts = filterPublished(
     canViewPrivateNotes(user)
-      ? filterPrivate(filteredFiles, dict)
-      : filteredFiles,
+      ? filteredFiles
+      : filterPrivate(filteredFiles, dict),
     dict
   );
   return visiblePosts;
