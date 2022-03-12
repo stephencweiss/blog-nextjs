@@ -18,6 +18,8 @@
     "baseUrl": ".",
     "paths": {
       "@/components/*": ["components/*"],
+      "@/features/*": ["features/*"],
+      "@/layout/*": ["layout/*"],
       "@/pages/*": ["pages/*"],
       "@/styles/*": ["styles/*"]
     }
