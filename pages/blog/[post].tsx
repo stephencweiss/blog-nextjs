@@ -13,7 +13,7 @@ import { isDictionary, reconstituteDictionary } from "../../utils";
 import { sessionOptions } from "../../utils/withSession";
 import { NavBar } from "../../components/NavBar";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
-import { extractNoteData } from "../../utils/extractNoteData";
+import { extractNoteData } from "../../ssUtils/extractNoteData";
 
 const dict = reconstituteDictionary(dictionary);
 

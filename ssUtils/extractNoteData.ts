@@ -1,12 +1,11 @@
-const matter = require("gray-matter");
-
 import type { ExpandedNote, Frontmatter } from "../types/index";
 import fs from "fs";
 import path from "path";
-import { createSlug } from "./createSlug";
-import { isValidDate } from "./isValidDate";
+import { createSlug } from "../utils/createSlug";
+import { isValidDate } from "../utils/isValidDate";
 import { NOTES_PATH } from "../constants";
 
+const matter = require("gray-matter");
 const getComposedRegex = (flags: string, ...regexes: RegExp[]) =>
   new RegExp(regexes.map((regex) => regex.source).join("|"), flags);
 

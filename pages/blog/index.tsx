@@ -13,10 +13,10 @@ import { NavBar, Search, Post } from "../../components";
 import { ExpandedNote } from "../../types/index";
 import {
   mapAsync,
-  extractNoteData,
   sessionOptions,
   getVisiblePosts,
 } from "../../utils";
+import { getVisiblePosts, extractNoteData } from "../../ssUtils";
 
 const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
   return (

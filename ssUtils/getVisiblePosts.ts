@@ -3,12 +3,12 @@ import {
   Dictionary,
   isDictionary,
   reconstituteDictionary,
-} from "./rebuildDictionary";
+} from "../utils/rebuildDictionary";
 import { User } from "@/types";
 import { NOTES_PATH } from "../constants";
-import { filterAsync } from "./asyncArrayFunctions";
+import { filterAsync } from "../utils/asyncArrayFunctions";
 import { fileFilter } from "./fileFilter";
-import { canViewPrivateNotes } from "./userPermissionFunctions";
+import { canViewPrivateNotes } from "../utils/userPermissionFunctions";
 
 export const allNotes = async () => {
   const dir = await fs.readdir(NOTES_PATH);

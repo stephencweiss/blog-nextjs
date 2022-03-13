@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const lunr = require("lunr");
-const { extractNoteData } = require("../utils/extractNoteData");
+const { extractNoteData } = require("../ssUtils/");
 import {
   CollectionEntry,
   CommonDictionaryEntry,
@@ -10,7 +10,7 @@ import {
 } from "../types/index";
 import { NOTES_PATH } from "../constants";
 
-const fileFilter = (parentDir: string, fileName: string): boolean => {
+const fileFilterSync = (parentDir: string, fileName: string): boolean => {
   const fullPath = path.join(parentDir, fileName);
   return fs.statSync(fullPath).isFile();
 };
@@ -96,7 +96,7 @@ function buildDictionaries(data: ExpandedNote[]) {
   const tagDictionary = new Map<string, CollectionEntry<string>[]>();
   const tagVisiblityDictionary = new Map<string, VisibilityCount>();
   const categoryDictionary = new Map<string, CollectionEntry<string>[]>();
-  const categoryVisbilityDictionary = new Map<string, VisibilityCount>();
+  const categoryVisibilityDictionary = new Map<string, VisibilityCount>();
   // const fullText = [];
 
   data.forEach(
@@ -134,7 +134,7 @@ function buildDictionaries(data: ExpandedNote[]) {
           category,
           baseEntry,
           categoryDictionary,
-          categoryVisbilityDictionary
+          categoryVisibilityDictionary
         );
       }
       // fullText.push({
@@ -152,18 +152,18 @@ function buildDictionaries(data: ExpandedNote[]) {
   writeToDisk([...fileNameDictionary.entries()], "fileNameDictionary");
   writeToDisk([...categoryDictionary.entries()], "categoryDictionary");
   writeToDisk(
-    [...categoryVisbilityDictionary.entries()],
-    "categorySearchDictionary"
+    [...categoryVisibilityDictionary.entries()],
+    "categoryVisibilityDictionary"
   );
   writeToDisk([...tagDictionary.entries()], "tagDictionary");
-  writeToDisk([...tagVisiblityDictionary.entries()], "tagSearchDictionary");
+  writeToDisk([...tagVisiblityDictionary.entries()], "tagVisiblityDictionary");
   // writeToDisk(fullText, "fullText");
 }
 
 function builder() {
   const dir = fs.readdirSync(NOTES_PATH);
   const files: string[] = dir.filter((fileName: string) =>
-    fileFilter(NOTES_PATH, fileName)
+    fileFilterSync(NOTES_PATH, fileName)
   );
   const extracted: ExpandedNote[] = files.map((f) => extractNoteData(f, true));
 

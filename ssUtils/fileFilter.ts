@@ -4,7 +4,10 @@ import path from "path";
 /**
  * Within the parentDir, return only children which are valid files
  */
-export const fileFilter = async (parentDir: string, fileName: string) => {
+export const fileFilter = async (
+  parentDir: string,
+  fileName: string
+): Promise<boolean> => {
   const fullPath = path.join(parentDir, fileName);
   return (await fs.stat(fullPath)).isFile();
 };
