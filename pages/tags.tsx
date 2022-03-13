@@ -13,7 +13,7 @@ import tagDictionary from "../public/resources/tagDictionary.json";
 import { createPill, Pill, PillInput } from "../components";
 import Link from "next/link";
 
-const dict = reconstituteDictionary(tagDictionary);
+const dict = reconstituteDictionary(tagDictionary, "tags");
 
 // - [] pills for each tag
 // - [] pills that are linked to the /search page to see all notes
@@ -59,7 +59,8 @@ async function wrappableServerSideProps(
   if (isCollection(dict)) {
     dict.data.forEach((val, key) => {
       tags.push({
-        text: `${key}, ${val.length}`,
+        id: key,
+        count: val.length,
         type: "tag",
         path: `/search?q=${key}&type=search&target=tag`,
       });

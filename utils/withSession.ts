@@ -3,7 +3,7 @@ import type { IronSessionOptions } from "iron-session";
 import type { User } from "../types/index";
 
 export const sessionOptions: IronSessionOptions = {
-  password: { 1: process.env.SECRET_COOKIE_PASSWORD },
+  password: { 1: process.env.SECRET_COOKIE_PASSWORD as string },
   cookieName: process.env.IRON_SESSION_COOKIE_NAME ?? "iron-session-cookie",
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",

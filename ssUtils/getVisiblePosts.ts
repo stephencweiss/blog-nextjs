@@ -5,7 +5,7 @@ import {
   isDictionary,
   reconstituteDictionary,
 } from "../utils/rebuildDictionary";
-import { User } from "@/types";
+import { User } from "../types/index";
 import { NOTES_PATH } from "../constants";
 import { filterAsync } from "../utils/asyncArrayFunctions";
 import { fileFilter } from "./fileFilter";
