@@ -8,7 +8,7 @@ export type PillProps = {
 };
 export function Pill(props: PillProps) {
   const { id, path, component } = props;
-  console.log({ props });
+
   const renderedPill = path ? (
     <Link href={path}>{component}</Link>
   ) : (
@@ -23,16 +23,27 @@ export function Pill(props: PillProps) {
 }
 
 export type PillInput = {
-  text: string;
+  id: string;
+  count?: number;
   type: string;
   path?: string;
 };
 
-export function createPill({ text, type, path }: PillInput): Pill {
+export function createPill({
+  id,
+  count = 0,
+  type,
+  path,
+}: PillInput): PillProps {
   const Component = path ? `a` : `div`;
   return {
-    id: `${type}-${text}`,
+    id: `${type}-${id}`,
     path,
-    component: <Component className={`pill ${type}`}>{text}</Component>,
+    component: (
+      <Component className={`pill ${type}`}>
+        {id}
+        {count ? `-${count}` : ""}
+      </Component>
+    ),
   };
 }

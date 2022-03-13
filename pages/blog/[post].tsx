@@ -15,7 +15,7 @@ import { NavBar } from "../../components/NavBar";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
 import { extractNoteData } from "../../ssUtils/extractNoteData";
 
-const dict = reconstituteDictionary(dictionary);
+const dict = reconstituteDictionary(dictionary, "slug");
 
 const PostPage: NextPage<ExpandedNote> = (props) => {
   const { content, title, date } = props;

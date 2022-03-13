@@ -1,6 +1,7 @@
 import { ParsedUrlQuery } from "querystring";
 import tagDictionary from "../public/resources/tagDictionary.json";
 import categoryDictionary from "../public/resources/categoryDictionary.json";
+import { DictionaryStyle } from "utils";
 
 export type SearchQuery = ParsedUrlQuery & {
   q: string;
@@ -13,13 +14,15 @@ export const isSearchQuery = (x: ParsedUrlQuery): x is SearchQuery => {
   return type === "search";
 };
 
-export const selectMetaFilterDictionary = (query: SearchQuery) => {
+export const selectMetaFilterDictionary = (
+  query: SearchQuery
+): { dictionary: any; style: DictionaryStyle } => {
   const { target } = query;
   switch (target) {
     case "tag":
-      return tagDictionary;
+      return { dictionary: tagDictionary, style: "tags" };
     case "category":
-      return categoryDictionary;
+      return { dictionary: categoryDictionary, style: "category" };
     default:
       throw new Error("Unknown query target");
   }

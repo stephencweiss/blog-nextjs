@@ -1,19 +1,27 @@
-import { CommonDictionaryEntry } from "types/_note";
+import {
+  CommonDictionaryEntry,
+  CollectionEntry,
+  VisibilityCount,
+} from "types/index";
 
-export type Dictionary = {
+export type DictionaryStyle = "category" | "tags" | "slug" | "fileName";
+export type Dictionary = StorageStyle & {
   type: "Dictionary";
   data: Map<string, CommonDictionaryEntry>;
 };
-export type Collection = {
+export type Collection = StorageStyle & {
   type: "Collection";
-  data: Map<string, CommonDictionaryEntry[]>;
+  data: Map<string, CollectionEntry<string>[]>;
 };
 
-type ReferenceType = Dictionary | Collection;
+type StorageStyle = { style: DictionaryStyle };
+
+export type StorageType = Dictionary | Collection;
 
 export function reconstituteDictionary(
-  flattenedDictionary: any[]
-): ReferenceType {
+  flattenedDictionary: any[],
+  style: DictionaryStyle
+): StorageType {
   const map = new Map();
   const input = Array.isArray(flattenedDictionary)
     ? flattenedDictionary
@@ -25,12 +33,21 @@ export function reconstituteDictionary(
   return {
     type: Array.isArray(input[0][1]) ? "Collection" : "Dictionary",
     data: map,
+    style,
   };
 }
 
-export const isDictionary = (x: ReferenceType): x is Dictionary => {
+export function reconstituteCounts(
+  flattenedCount: any[]
+): Map<string, VisibilityCount> {
+  const map = new Map();
+  flattenedCount.map(([key, counts]) => map.set(key, counts));
+  return map;
+}
+
+export const isDictionary = (x: StorageType): x is Dictionary => {
   return x.type === "Dictionary";
 };
-export const isCollection = (x: ReferenceType): x is Collection => {
+export const isCollection = (x: StorageType): x is Collection => {
   return x.type === "Collection";
 };

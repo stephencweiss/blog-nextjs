@@ -4,12 +4,20 @@ export type ExpandedNote = Note &
     fileName: string;
   };
 
+export type KeyCounts = { key: string; count: number };
+export type ExpandedNoteWithCounts = ExpandedNote & {
+  tagCounts: KeyCounts[];
+  categoryCounts: KeyCounts[];
+};
+export type CollectionEntry<T> = CommonDictionaryEntry & { collection: T[] };
+export type CollectionEntryWithCounts<T> = CollectionEntry<T> & {
+  collectionCounts: KeyCounts[];
+};
+
 export type VisibilityCount = {
   totalCount: number;
   publicCount: number;
 };
-
-export type CollectionEntry<T> = CommonDictionaryEntry & { collection: T[] };
 
 export type CommonDictionaryEntry = Pick<
   ExpandedNote,

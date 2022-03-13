@@ -9,16 +9,22 @@ import { withIronSessionSsr } from "iron-session/next";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
 import Head from "next/head";
 import dictionary from "../../public/resources/fileNameDictionary.json";
+import categoryCount from "../../public/resources/categoryVisibilityDictionary.json";
+import tagCount from "../../public/resources/tagVisiblityDictionary.json";
 import { NavBar, Search, Post } from "../../components";
-import { ExpandedNote } from "../../types/index";
+import { ExpandedNoteWithCounts } from "../../types/index";
 import {
+  addCountsToNotes,
   mapAsync,
   sessionOptions,
-  getVisiblePosts,
+  reconstituteCounts,
 } from "../../utils";
 import { getVisiblePosts, extractNoteData } from "../../ssUtils";
 
-const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
+export const cCount = reconstituteCounts(categoryCount);
+export const tCount = reconstituteCounts(tagCount);
+
+const Blog: NextPage<{ posts: ExpandedNoteWithCounts[] }> = ({ posts }) => {
   return (
     <div>
       <Head>
@@ -31,9 +37,17 @@ const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
         <NavBar />
         <Search />
         <>
-          {posts.map((post: ExpandedNote) => (
-            <Post key={post.slug} post={post} />
-          ))}
+          {posts.map((post) => {
+            const { slug, tagCounts, categoryCounts } = post;
+            return (
+              <Post
+                key={slug}
+                post={post}
+                tagCounts={tagCounts}
+                categoryCounts={categoryCounts}
+              />
+            );
+          })}
         </>
       </main>
     </div>
@@ -47,17 +61,20 @@ export const getServerSideProps = withIronSessionSsr(
 
 async function wrappableServerSideProps(
   context: GetServerSidePropsContext<NextParsedUrlQuery, PreviewData>
-): Promise<GetServerSidePropsResult<{ posts: ExpandedNote[] }>> {
+): Promise<GetServerSidePropsResult<{ posts: ExpandedNoteWithCounts[] }>> {
   const user = context?.req?.session?.user;
-
-  const visiblePosts = await getVisiblePosts(dictionary, user);
+  const visiblePosts = await getVisiblePosts(dictionary, "fileName", user);
 
   const posts = await mapAsync(
     visiblePosts,
     async (file) => await extractNoteData(file, true)
   );
 
-  return { props: { posts } };
+  const postsWithCounts: ExpandedNoteWithCounts[] = posts.map((post) =>
+    addCountsToNotes(post, user)
+  );
+
+  return { props: { posts: postsWithCounts } };
 }
 
 export default Blog;

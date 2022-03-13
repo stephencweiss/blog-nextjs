@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import {
   Dictionary,
+  DictionaryStyle,
   isDictionary,
   reconstituteDictionary,
 } from "../utils/rebuildDictionary";
@@ -15,7 +16,11 @@ export const allNotes = async () => {
   return await filterAsync(dir, (fileName) => fileFilter(NOTES_PATH, fileName));
 };
 
-export async function getVisiblePosts(dictionary: any, user?: User) {
+export async function getVisiblePosts(
+  dictionary: any,
+  style: DictionaryStyle,
+  user?: User
+) {
   function filterPrivate(files: string[], dictionary: Dictionary) {
     return files.filter(
       (file) =>
@@ -32,7 +37,7 @@ export async function getVisiblePosts(dictionary: any, user?: User) {
   }
 
   const filteredFiles = await allNotes();
-  const dict = reconstituteDictionary(dictionary);
+  const dict = reconstituteDictionary(dictionary, style);
   if (!isDictionary(dict)) throw new Error("Check Dictionary reference");
 
   const visiblePosts = filterPublished(

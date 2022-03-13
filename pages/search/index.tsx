@@ -8,25 +8,26 @@ import { NextParsedUrlQuery } from "next/dist/server/request-meta";
 import Head from "next/head";
 import { withIronSessionSsr } from "iron-session/next";
 import {
+  addCountsToCollection,
+  isCollection,
   reconstituteDictionary,
   removeUndefined,
   sessionOptions,
 } from "../../utils";
 
-import { Card, createPill, NavBar, Post, Search } from "../../components";
+import { Card, createPill, NavBar, Search } from "../../components";
 import {
-  CollectionEntry,
-  CommonDictionaryEntry,
   SearchQuery,
   User,
   isSearchQuery,
   selectMetaFilterDictionary,
+  CollectionEntryWithCounts,
 } from "../../types/index";
 import { canViewPrivateNotes } from "utils/userPermissionFunctions";
 import { marked } from "marked";
 import Link from "next/link";
 
-type SearchResult = CollectionEntry<string>;
+type SearchResult = CollectionEntryWithCounts<string>;
 const SearchPage: NextPage<{ query: SearchResult[] }> = ({ query }) => {
   // - [] Add search results
   // - [] Add sort functionality (a-z, z-a)
@@ -46,13 +47,17 @@ const SearchPage: NextPage<{ query: SearchResult[] }> = ({ query }) => {
         <>
           {query.map((entry) => {
             const { title, collection, date, excerpt, slug } = entry;
-            const pills = collection.map((entry) =>
-              createPill({
-                text: entry,
+            const pills = collection.map((e) => {
+              const count =
+                entry.collectionCounts?.find((ct) => ct.key == e)?.count ?? 0;
+
+              return createPill({
+                id: e,
+                count,
                 type: "tag",
-                path: `/search?q=${entry}&type=search&target=tag`,
-              })
-            );
+                path: `/search?q=${e}&type=search&target=tag`,
+              });
+            });
             return (
               <>
                 <Card
@@ -82,7 +87,9 @@ export const getServerSideProps = withIronSessionSsr(
 
 async function wrappableServerSideProps(
   context: GetServerSidePropsContext<NextParsedUrlQuery, PreviewData>
-): Promise<GetServerSidePropsResult<{ query: CommonDictionaryEntry[] }>> {
+): Promise<
+  GetServerSidePropsResult<{ query: CollectionEntryWithCounts<string>[] }>
+> {
   const { query } = context;
   const user = context?.req?.session?.user;
   if (!isSearchQuery(query)) {
@@ -104,7 +111,10 @@ function textSearch() {
 }
 
 async function metaFilter(query: SearchQuery, user?: User) {
-  const dict = reconstituteDictionary(selectMetaFilterDictionary(query));
+  const { dictionary, style } = selectMetaFilterDictionary(query);
+  const dict = reconstituteDictionary(dictionary, style);
+  if (!isCollection(dict)) return [];
+
   const canViewPrivate = canViewPrivateNotes(user);
   const qs = query?.q;
   const res = (
@@ -114,7 +124,8 @@ async function metaFilter(query: SearchQuery, user?: User) {
   )
     .filter(removeUndefined)
     .flat()
-    .filter((cde) => (canViewPrivate ? true : !cde.isPrivate));
+    .filter((cde) => (canViewPrivate ? true : !cde.isPrivate))
+    .map((entry) => addCountsToCollection(entry, dict.style, user));
 
   return res;
 }

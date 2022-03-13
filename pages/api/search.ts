@@ -8,7 +8,7 @@ import { sessionOptions } from "../../utils/withSession";
 import { reconstituteDictionary } from "../../utils/rebuildDictionary";
 import { canViewPrivateNotes } from "utils/userPermissionFunctions";
 
-const slugDictionary = reconstituteDictionary(dictionary);
+const slugDictionary = reconstituteDictionary(dictionary, "slug");
 
 const readPublicResource = (fileName: string) =>
   fs.readFileSync(path.join(process.cwd(), "public/resources", fileName), {
@@ -34,12 +34,10 @@ function searchHandler(req: NextApiRequest, res: NextApiResponse) {
     const searchIdx = canViewPrivateNotes(req.session?.user)
       ? privateIdx
       : publicIdx;
-    const searchResults = searchIdx
-      .search(qs)
-      .map((res) => ({
-        score: res.score,
-        ...slugDictionary.data.get(res.ref),
-      }));
+    const searchResults = searchIdx.search(qs).map((res) => ({
+      score: res.score,
+      ...slugDictionary.data.get(res.ref),
+    }));
 
     res.json(searchResults);
   } catch (e) {
