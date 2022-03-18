@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import lunr from "lunr";
+import { Document, SimpleDocumentSearchResultSetUnit } from "flexsearch";
 import fs from "fs";
 import path from "path";
 import { withIronSessionApiRoute } from "iron-session/next";
@@ -16,9 +17,25 @@ const readPublicResource = (fileName: string) =>
 
 const publicData = JSON.parse(readPublicResource("publicSearchIdx.json"));
 const privateData = JSON.parse(readPublicResource("privateSearchIdx.json"));
+const flexKeys = JSON.parse(readPublicResource("flexSearchKeys.json"));
 
 var publicIdx = lunr.Index.load(publicData);
 var privateIdx = lunr.Index.load(privateData);
+const _searchFields = [
+  "fileName",
+  "title",
+  "slug",
+  "tags",
+  "category",
+  "stage",
+  "content",
+];
+const options = { document: { id: "id", index: _searchFields } };
+const publicFlexIdx = new Document(options);
+flexKeys.forEach((key: string) => {
+  const data = JSON.parse(readPublicResource(`flex/${key}.json`));
+  publicFlexIdx.import(key, data);
+});
 
 function searchHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -31,11 +48,14 @@ function searchHandler(req: NextApiRequest, res: NextApiResponse) {
     res.status(200);
     res.setHeader("Content-Type", "application/json");
     const searchIdx = req.session?.user?.admin ? privateIdx : publicIdx;
-    const searchResults = searchIdx
-      .search(qs)
-      .map((res) => ({ score: res.score, ...slugDictionary.get(res.ref) }));
+    const searchResults = publicFlexIdx.search(qs);
 
-    res.json(searchResults);
+    const consolidated = [
+      ...new Set(searchResults.map((res) => res.result).flat()),
+    ].map((slug) => slugDictionary.get(slug));
+    console.log(JSON.stringify({ consolidated }, null, 4));
+
+    res.json(consolidated);
   } catch (e) {
     res.status(500);
     res.end();

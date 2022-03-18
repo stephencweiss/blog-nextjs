@@ -20,6 +20,8 @@ function writeToDisk(data: any, fileName: string) {
     fs.mkdirSync(dirPath);
   }
 
+  console.log({ data });
+  console.log({ fileName });
   fs.writeFileSync(`${dirPath}/${fileName}.json`, JSON.stringify(data), {
     encoding: "utf-8",
   });
@@ -40,11 +42,11 @@ function buildFlexSearchIndexes(data: ExpandedNote[]) {
   const privateSearchIdx = new Document(options);
   const publicSearchIdx = new Document(options);
 
-  data.forEach((entry, index) => {
+  data.forEach((entry) => {
     const { fileName, title, slug, tags, category, stage, content, isPrivate } =
       entry;
     const item = {
-      id: index,
+      id: slug,
       fileName,
       title,
       slug,
@@ -58,8 +60,17 @@ function buildFlexSearchIndexes(data: ExpandedNote[]) {
     publicSearchIdx.add(item);
   });
 
-  writeToDisk(publicSearchIdx, "publicFlexSearchIdx");
-  writeToDisk(privateSearchIdx, "privateFlexSearchIdx");
+  const keys: any[] = [];
+  publicSearchIdx.export(function (key: any, data: any) {
+    return new Promise((resolve) => {
+      writeToDisk(data ?? "[{}]", `flex/${key}`);
+      keys.push(key);
+      resolve(writeToDisk(keys, "flexSearchKeys"));
+    });
+  });
+  // writeToDisk(, "publicFlexSearchIdx");
+  // writeToDisk(publicSearchIdx, "publicFlexSearchIdx");
+  // writeToDisk(privateSearchIdx, "privateFlexSearchIdx");
 }
 // function buildSearchIndex(data: ExpandedNote[]) {
 function buildSearchIndex(data: any[]) {
