@@ -14,3 +14,28 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.pills {
+  display: flex;
+  flex-direction: row;
+  * + * {
+    padding-left: 4px;
+  }
+  & .pill {
+    border-radius: 10px;
+    padding-inline: 4px;
+    padding-block: 2px;
+  }
+  & .isPrivate {
+    background-color: deeppink;
+  }
+  & .category {
+    background-color: aqua;
+  }
+  & .tag {
+    background-color: paleturquoise;
+  }
+}
+.pill-item {
+  list-style: none;
+}
