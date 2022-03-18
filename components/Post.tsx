@@ -4,11 +4,11 @@ import { ExpandedNote } from "../types/post";
 import { Card } from "./Card";
 import { marked } from "marked";
 
-export type Props = {
+type PostProps = {
   post: ExpandedNote;
 };
 
-export function Post({ post }: Props) {
+export function Post({ post }: PostProps) {
   const { title, date, slug, excerpt } = post;
 
   return (
