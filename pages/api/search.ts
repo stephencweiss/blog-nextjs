@@ -1,12 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import lunr from "lunr";
+
+import { Document } from "flexsearch";
 import fs from "fs";
 import path from "path";
 import { withIronSessionApiRoute } from "iron-session/next";
 import dictionary from "../../public/resources/slugDictionary.json";
 import { sessionOptions } from "../../utils/withSession";
 import { rebuildDictionary } from "../../utils/rebuildDictionary";
-
+import { FLEX_SEARCH_OPTIONS } from "../../constants";
 const slugDictionary = rebuildDictionary(dictionary);
 
 const readPublicResource = (fileName: string) =>
@@ -14,11 +15,21 @@ const readPublicResource = (fileName: string) =>
     encoding: "utf8",
   });
 
-const publicData = JSON.parse(readPublicResource("publicSearchIdx.json"));
-const privateData = JSON.parse(readPublicResource("privateSearchIdx.json"));
+const publicKeys = JSON.parse(readPublicResource("publicFlexSearchKeys.json"));
+const privateKeys = JSON.parse(
+  readPublicResource("privateFlexSearchKeys.json")
+);
 
-var publicIdx = lunr.Index.load(publicData);
-var privateIdx = lunr.Index.load(privateData);
+const publicIdx = new Document(FLEX_SEARCH_OPTIONS);
+const privateIdx = new Document(FLEX_SEARCH_OPTIONS);
+publicKeys.forEach((key: string) => {
+  const data = JSON.parse(readPublicResource(`publicflex/${key}.json`));
+  publicIdx.import(key, data);
+});
+privateKeys.forEach((key: string) => {
+  const data = JSON.parse(readPublicResource(`privateflex/${key}.json`));
+  privateIdx.import(key, data);
+});
 
 function searchHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -31,11 +42,12 @@ function searchHandler(req: NextApiRequest, res: NextApiResponse) {
     res.status(200);
     res.setHeader("Content-Type", "application/json");
     const searchIdx = req.session?.user?.admin ? privateIdx : publicIdx;
-    const searchResults = searchIdx
-      .search(qs)
-      .map((res) => ({ score: res.score, ...slugDictionary.get(res.ref) }));
+    const searchResults = searchIdx.search(qs);
+    const consolidated = [
+      ...new Set(searchResults.map((res) => res.result).flat()),
+    ].map((slug) => slugDictionary.get(slug));
 
-    res.json(searchResults);
+    res.json(consolidated);
   } catch (e) {
     res.status(500);
     res.end();
