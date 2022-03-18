@@ -2,10 +2,9 @@ import { ExpandedNote } from "../types/post";
 
 const fs = require("fs");
 const path = require("path");
-const lunr = require("lunr");
 const { Document } = require("flexsearch");
 const { extractNoteData } = require("../utils/extractNoteData");
-import { NOTES_PATH } from "../constants";
+import { FLEX_SEARCH_OPTIONS, NOTES_PATH } from "../constants";
 
 const fileFilter = (parentDir: string, fileName: string): boolean => {
   const fullPath = path.join(parentDir, fileName);
@@ -20,31 +19,19 @@ function writeToDisk(data: any, fileName: string) {
     fs.mkdirSync(dirPath);
   }
 
-  console.log({ data });
-  console.log({ fileName });
   fs.writeFileSync(`${dirPath}/${fileName}.json`, JSON.stringify(data), {
     encoding: "utf-8",
   });
 }
 
-const _searchFields = [
-  "fileName",
-  "title",
-  "slug",
-  "tags",
-  "category",
-  "stage",
-  "content",
-];
-
-function buildFlexSearchIndexes(data: ExpandedNote[]) {
-  const options = { document: { id: "id", index: _searchFields } };
-  const privateSearchIdx = new Document(options);
-  const publicSearchIdx = new Document(options);
+function buildSearchIndexes(data: ExpandedNote[]) {
+  const privateSearchIdx = new Document(FLEX_SEARCH_OPTIONS);
+  const publicSearchIdx = new Document(FLEX_SEARCH_OPTIONS);
 
   data.forEach((entry) => {
     const { fileName, title, slug, tags, category, stage, content, isPrivate } =
       entry;
+    // These keys match the FLEX_SEARCH_OPTIONS
     const item = {
       id: slug,
       fileName,
@@ -63,49 +50,18 @@ function buildFlexSearchIndexes(data: ExpandedNote[]) {
   const keys: any[] = [];
   publicSearchIdx.export(function (key: any, data: any) {
     return new Promise((resolve) => {
-      writeToDisk(data ?? "[{}]", `flex/${key}`);
+      writeToDisk(data ?? "[{}]", `publicflex/${key}`);
       keys.push(key);
-      resolve(writeToDisk(keys, "flexSearchKeys"));
+      resolve(writeToDisk(keys, "publicFlexSearchKeys"));
     });
   });
-  // writeToDisk(, "publicFlexSearchIdx");
-  // writeToDisk(publicSearchIdx, "publicFlexSearchIdx");
-  // writeToDisk(privateSearchIdx, "privateFlexSearchIdx");
-}
-// function buildSearchIndex(data: ExpandedNote[]) {
-function buildSearchIndex(data: any[]) {
-  const _searchFields = [
-    "fileName",
-    "title",
-    "slug",
-    "tags",
-    "category",
-    "stage",
-    "content",
-  ];
-
-  function standardLunrBuilder() {
-    const builder = new lunr.Builder();
-    builder.pipeline.add(lunr.trimmer, lunr.stopWordFilter, lunr.stemmer);
-    builder.searchPipeline.add(lunr.stemmer);
-    return builder;
-  }
-
-  const configFn = (indexPrivate = false) => {
-    const builder = standardLunrBuilder();
-    builder.ref("slug");
-    _searchFields.forEach((f) => builder.field(f));
-    data.forEach(
-      (entry) => (indexPrivate ? true : !entry.isPrivate) && builder.add(entry)
-    );
-    return builder.build();
-  };
-
-  const privateSearchIdx = configFn(true);
-  const publicSearchIdx = configFn();
-
-  writeToDisk(publicSearchIdx, "publicSearchIdx");
-  writeToDisk(privateSearchIdx, "privateSearchIdx");
+  privateSearchIdx.export(function (key: any, data: any) {
+    return new Promise((resolve) => {
+      writeToDisk(data ?? "[{}]", `privateflex/${key}`);
+      keys.push(key);
+      resolve(writeToDisk(keys, "privateFlexSearchKeys"));
+    });
+  });
 }
 
 function buildDictionaries(data: ExpandedNote[]) {
@@ -164,8 +120,7 @@ function builder() {
   const extracted: ExpandedNote[] = files.map((f) => extractNoteData(f, true));
 
   buildDictionaries(extracted);
-  buildSearchIndex(extracted);
-  buildFlexSearchIndexes(extracted);
+  buildSearchIndexes(extracted);
 }
 
 builder();

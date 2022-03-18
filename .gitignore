@@ -1,5 +1,4 @@
-public/resources/*.json
-public/resources/flex/*.json
+public/resources/**/*.json
 .env
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
