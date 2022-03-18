@@ -1,9 +1,8 @@
 import { ExpandedNote } from "../types/post";
-
-const fs = require("fs");
-const path = require("path");
-const { Document } = require("flexsearch");
-const { extractNoteData } = require("../utils/extractNoteData");
+import fs from "fs";
+import path from "path";
+import { Document } from "flexsearch";
+import { extractNoteData } from "../utils/extractNoteData";
 import { FLEX_SEARCH_OPTIONS, NOTES_PATH } from "../constants";
 
 const fileFilter = (parentDir: string, fileName: string): boolean => {
