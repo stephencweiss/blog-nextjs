@@ -33,5 +33,5 @@
     "**/*.tsx",
     "scripts/buildDictionary.tss"
   ],
-  "exclude": ["node_modules", "**/*.test.*"]
+  "exclude": ["node_modules", "**/*.test.*", "content/scripts"]
 }
