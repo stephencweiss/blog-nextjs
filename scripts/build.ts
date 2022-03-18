@@ -77,6 +77,8 @@ function buildDictionaries(data: ExpandedNote[]) {
       content,
       excerpt,
       title,
+      tags,
+      category,
       ...rest
     }) => {
       slugDictionary.set(slug, {
@@ -86,6 +88,8 @@ function buildDictionaries(data: ExpandedNote[]) {
         isPrivate,
         title,
         excerpt,
+        tags,
+        category,
       });
       fileNameDictionary.set(fileName, {
         fileName,
