@@ -1,11 +1,11 @@
 import { useCallback, useRef, useState } from "react";
 import Link from "next/link";
 import styles from "./Search.module.css";
-import { Card } from "./Card";
+import { Card } from "../Card";
 
 const searchEndpoint = (query: string) => `/api/search?query=${query}`;
 
-export default function Search() {
+export function Search() {
   const searchRef = useRef(null);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(false);
@@ -72,3 +72,5 @@ export default function Search() {
     </div>
   );
 }
+
+export default Search;

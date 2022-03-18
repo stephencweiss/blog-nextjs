@@ -19,7 +19,7 @@ import { Dictionary, rebuildDictionary } from "../../utils/rebuildDictionary";
 import { NavBar } from "../../components/NavBar";
 import { sessionOptions } from "../../utils/withSession";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
-import Search from "../../components/Search";
+import { Search } from "../../components";
 
 const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
   return (

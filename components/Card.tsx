@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export type Props = {
+type CardProps = {
   title: string;
   subheader?: string;
   details?: string;
@@ -8,7 +8,7 @@ export type Props = {
   primaryAction?: React.ReactNode;
 };
 
-export function Card(props: Props) {
+export function Card(props: CardProps) {
   const { title, subheader, details, body, primaryAction } = props;
   return (
     <div className="card">

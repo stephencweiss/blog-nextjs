@@ -1,0 +1,41 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.pills {
+  display: flex;
+  flex-direction: row;
+  * + * {
+    padding-left: 4px;
+  }
+  & .pill {
+    border-radius: 10px;
+    padding-inline: 4px;
+    padding-block: 2px;
+  }
+  & .isPrivate {
+    background-color: deeppink;
+  }
+  & .category {
+    background-color: aqua;
+  }
+  & .tag {
+    background-color: paleturquoise;
+  }
+}
+.pill-item {
+  list-style: none;
+}
