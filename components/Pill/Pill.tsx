@@ -11,7 +11,7 @@ export function Pill(props: PillProps) {
   const { id, path, component } = props;
 
   return (
-    <li className="pill-item" key={id}>
+    <li className="pill-item link" key={id}>
       {path ? <Link href={path}>{component}</Link> : <>{component}</>}
     </li>
   );

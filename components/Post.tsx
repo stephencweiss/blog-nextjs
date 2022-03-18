@@ -15,6 +15,7 @@ export function Post({ post }: PostProps) {
   return (
     <Card
       title={title}
+      slug={`/blog/${slug}`}
       subheader={`Posted on ${date}`}
       details={marked(excerpt ?? "")}
       pills={createPillsFromNote(post)}

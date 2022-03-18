@@ -1,9 +1,11 @@
+import Link from "next/link";
 import * as React from "react";
 import { PillProps } from "./Pill";
 import { Pill } from "./Pill";
 
 type CardProps = {
   title: string;
+  slug: string;
   subheader?: string;
   details?: string;
   body?: string;
@@ -12,11 +14,14 @@ type CardProps = {
 };
 
 export function Card(props: CardProps) {
-  const { pills, title, subheader, details, body, primaryAction } = props;
+  const { pills, title, subheader, details, body, primaryAction, slug } = props;
+
   return (
     <div className="card">
       <div className="post-date">{subheader}</div>
-      <h3>{title}</h3>
+      <Link href={slug} passHref>
+        <h3 className="link">{title}</h3>
+      </Link>
       {pills?.length && (
         <ul className="pills">
           {pills.map((pill) => (

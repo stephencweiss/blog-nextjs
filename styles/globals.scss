@@ -15,6 +15,10 @@ a {
   box-sizing: border-box;
 }
 
+.link {
+  cursor: pointer;
+}
+
 .pills {
   display: flex;
   flex-direction: row;

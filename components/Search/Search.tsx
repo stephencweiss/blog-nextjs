@@ -59,6 +59,7 @@ export function Search() {
               <li className={styles.result} key={slug}>
                 <Card
                   title={title}
+                  slug={`/blog/${slug}`}
                   details={excerpt}
                   pills={createPillsFromNote(res)}
                   primaryAction={
