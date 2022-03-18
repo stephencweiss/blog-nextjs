@@ -14,6 +14,7 @@
     "test:ci": "jest --ci"
   },
   "dependencies": {
+    "flexsearch": "^0.7.21",
     "gray-matter": "^4.0.3",
     "iron-session": "^6.0.5",
     "marked": "^4.0.12",

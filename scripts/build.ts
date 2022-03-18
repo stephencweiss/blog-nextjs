@@ -3,6 +3,7 @@ import { ExpandedNote } from "../types/post";
 const fs = require("fs");
 const path = require("path");
 const lunr = require("lunr");
+const { Document } = require("flexsearch");
 const { extractNoteData } = require("../utils/extractNoteData");
 import { NOTES_PATH } from "../constants";
 
@@ -24,6 +25,42 @@ function writeToDisk(data: any, fileName: string) {
   });
 }
 
+const _searchFields = [
+  "fileName",
+  "title",
+  "slug",
+  "tags",
+  "category",
+  "stage",
+  "content",
+];
+
+function buildFlexSearchIndexes(data: ExpandedNote[]) {
+  const options = { document: { id: "id", index: _searchFields } };
+  const privateSearchIdx = new Document(options);
+  const publicSearchIdx = new Document(options);
+
+  data.forEach((entry, index) => {
+    const { fileName, title, slug, tags, category, stage, content, isPrivate } =
+      entry;
+    const item = {
+      id: index,
+      fileName,
+      title,
+      slug,
+      tags,
+      category,
+      stage,
+      content,
+    };
+
+    isPrivate && privateSearchIdx.add(item);
+    publicSearchIdx.add(item);
+  });
+
+  writeToDisk(publicSearchIdx, "publicFlexSearchIdx");
+  writeToDisk(privateSearchIdx, "privateFlexSearchIdx");
+}
 // function buildSearchIndex(data: ExpandedNote[]) {
 function buildSearchIndex(data: any[]) {
   const _searchFields = [
@@ -117,6 +154,7 @@ function builder() {
 
   buildDictionaries(extracted);
   buildSearchIndex(extracted);
+  buildFlexSearchIndexes(extracted);
 }
 
 builder();
