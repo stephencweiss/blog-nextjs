@@ -18,8 +18,9 @@ a {
 .pills {
   display: flex;
   flex-direction: row;
+  padding-inline-start: 4px;
   * + * {
-    padding-left: 4px;
+    padding-inline-start: 4px;
   }
   & .pill {
     border-radius: 10px;

@@ -2,6 +2,8 @@ import { useCallback, useRef, useState } from "react";
 import Link from "next/link";
 import styles from "./Search.module.css";
 import { Card } from "../Card";
+import { ExpandedNote } from "types/post";
+import { createPillsFromNote } from "utils/pillHelpers";
 
 const searchEndpoint = (query: string) => `/api/search?query=${query}`;
 
@@ -50,7 +52,7 @@ export function Search() {
       />
       {active && results?.length > 0 && (
         <ul className={styles.results}>
-          {results.map((res) => {
+          {results.map((res: ExpandedNote) => {
             const { slug, title, excerpt } = res;
 
             return (
@@ -58,6 +60,7 @@ export function Search() {
                 <Card
                   title={title}
                   details={excerpt}
+                  pills={createPillsFromNote(res)}
                   primaryAction={
                     <Link href={`/blog/${slug}`}>
                       <a>Read More</a>
