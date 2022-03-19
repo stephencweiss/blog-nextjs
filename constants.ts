@@ -4,7 +4,7 @@ import path from "path";
  */
 export const NOTES_PATH = path.join(process.cwd(), "content/notes");
 
-const searchFields = [
+export const SEARCH_FIELDS = [
   "fileName",
   "title",
   "slug",
@@ -14,5 +14,11 @@ const searchFields = [
   "content",
 ];
 export const FLEX_SEARCH_OPTIONS = {
-  document: { id: "id", index: searchFields },
+  document: {
+    id: "id",
+    optimize: true,
+    tokenize: "full",
+    cache: 100,
+    index: SEARCH_FIELDS,
+  },
 };

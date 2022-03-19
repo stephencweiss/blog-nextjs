@@ -1,9 +1,8 @@
 import { ExpandedNote } from "../types/post";
 import fs from "fs";
 import path from "path";
-import { Document } from "flexsearch";
 import { extractNoteData } from "../utils/extractNoteData";
-import { FLEX_SEARCH_OPTIONS, NOTES_PATH } from "../constants";
+import { NOTES_PATH } from "../constants";
 
 const fileFilter = (parentDir: string, fileName: string): boolean => {
   const fullPath = path.join(parentDir, fileName);
@@ -22,47 +21,6 @@ function writeToDisk(data: any, fileName: string) {
     encoding: "utf-8",
   });
 }
-
-function buildSearchIndexes(data: ExpandedNote[]) {
-  const privateSearchIdx = new Document(FLEX_SEARCH_OPTIONS);
-  const publicSearchIdx = new Document(FLEX_SEARCH_OPTIONS);
-
-  data.forEach((entry) => {
-    const { fileName, title, slug, tags, category, stage, content, isPrivate } =
-      entry;
-    // These keys match the FLEX_SEARCH_OPTIONS
-    const item = {
-      id: slug,
-      fileName,
-      title,
-      slug,
-      tags,
-      category,
-      stage,
-      content,
-    };
-
-    isPrivate && privateSearchIdx.add(item);
-    publicSearchIdx.add(item);
-  });
-
-  const keys: any[] = [];
-  publicSearchIdx.export(function (key: any, data: any) {
-    return new Promise((resolve) => {
-      writeToDisk(data ?? "[{}]", `publicflex/${key}`);
-      keys.push(key);
-      resolve(writeToDisk(keys, "publicFlexSearchKeys"));
-    });
-  });
-  privateSearchIdx.export(function (key: any, data: any) {
-    return new Promise((resolve) => {
-      writeToDisk(data ?? "[{}]", `privateflex/${key}`);
-      keys.push(key);
-      resolve(writeToDisk(keys, "privateFlexSearchKeys"));
-    });
-  });
-}
-
 function buildDictionaries(data: ExpandedNote[]) {
   const slugDictionary = new Map();
   const fileNameDictionary = new Map();
@@ -121,9 +79,8 @@ function builder() {
     fileFilter(NOTES_PATH, fileName)
   );
   const extracted: ExpandedNote[] = files.map((f) => extractNoteData(f, true));
-
+  writeToDisk(extracted, "allData");
   buildDictionaries(extracted);
-  buildSearchIndexes(extracted);
 }
 
 builder();
