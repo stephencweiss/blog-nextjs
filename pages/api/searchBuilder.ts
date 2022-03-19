@@ -4,8 +4,9 @@ import { ExpandedNote } from "types/index";
 import { rebuildDictionary } from "../../utils/rebuildDictionary";
 import slugDictionary from "../../public/resources/slugDictionary.json";
 import { readPublicResource } from "utils/serverUtils";
+import { removeUndefined } from "utils";
 
-const dictionary = rebuildDictionary(slugDictionary);
+const dictionary: Map<any, ExpandedNote> = rebuildDictionary(slugDictionary);
 const data = JSON.parse(readPublicResource("allData.json"));
 
 export function searchBuilder() {
@@ -49,7 +50,7 @@ export function searchBuilder() {
   _buildSearchIndexes(data, publicIdx);
   _buildSearchIndexes(data, privateIdx, true);
 
-  return function search(query: string, isAdmin = false) {
+  return function search(query: string, isAdmin = false): ExpandedNote[] {
     const searchIdx = isAdmin ? privateIdx : publicIdx;
 
     if (!searchIdx) return [];
@@ -62,7 +63,9 @@ export function searchBuilder() {
 
     const consolidated = [
       ...new Set(searchResults.map((res) => res.result).flat()),
-    ].map((slug) => dictionary.get(slug));
+    ]
+      .map((slug) => dictionary.get(slug))
+      .filter(removeUndefined);
 
     return consolidated;
   };
