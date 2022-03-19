@@ -2,7 +2,7 @@ import { Document } from "flexsearch";
 import { FLEX_SEARCH_OPTIONS } from "../../constants";
 import { ExpandedNote } from "types/index";
 
-export function searchBuilder(data: any) {
+export function searchBuilder(data: any, dictionary: Map<any, any>) {
   function _buildSearchIndexes(
     data: ExpandedNote[],
     idx: Document<unknown, false>,
@@ -47,11 +47,17 @@ export function searchBuilder(data: any) {
     const searchIdx = isAdmin ? privateIdx : publicIdx;
 
     if (!searchIdx) return [];
-    return searchIdx.search({
+    const searchResults = searchIdx.search({
       query,
       limit: 100,
       suggest: true,
       bool: "or",
     });
+
+    const consolidated = [
+      ...new Set(searchResults.map((res) => res.result).flat()),
+    ].map((slug) => dictionary.get(slug));
+
+    return consolidated;
   };
 }

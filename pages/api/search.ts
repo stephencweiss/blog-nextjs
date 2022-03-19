@@ -14,8 +14,7 @@ const readPublicResource = (fileName: string) =>
   });
 
 const allData = JSON.parse(readPublicResource("allData.json"));
-
-const search = searchBuilder(allData);
+const search = searchBuilder(allData, slugDictionary);
 
 function searchHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -29,12 +28,7 @@ function searchHandler(req: NextApiRequest, res: NextApiResponse) {
     res.setHeader("Content-Type", "application/json");
 
     const searchResults = search(qs, req.session?.user?.admin);
-
-    const consolidated = [
-      ...new Set(searchResults.map((res) => res.result).flat()),
-    ].map((slug) => slugDictionary.get(slug));
-
-    res.json(consolidated);
+    res.json(searchResults);
   } catch (e) {
     res.status(500);
     res.end();

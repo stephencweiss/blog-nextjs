@@ -30,7 +30,6 @@ import {
 } from "../../types/index";
 import { marked } from "marked";
 import Link from "next/link";
-import { canViewPrivateNotes } from "utils/userPermissions";
 import { createPillsFromNote } from "utils/pillHelpers";
 import { sessionOptions } from "utils/withSession";
 import { searchBuilder } from "../api/searchBuilder";
@@ -39,9 +38,10 @@ const readPublicResource = (fileName: string) =>
     encoding: "utf8",
   });
 
+const slugDictionary = rebuildDictionary(dictionary);
 export const allData = JSON.parse(readPublicResource("allData.json"));
 
-const search = searchBuilder(allData);
+const search = searchBuilder(allData, slugDictionary);
 // console.log(`searchIndex`, { search });
 type SearchResult = ExpandedNote;
 const SearchPage: NextPage<{ query: SearchResult[] }> = ({ query }) => {
