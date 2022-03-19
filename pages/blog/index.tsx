@@ -7,18 +7,20 @@ import type {
 import fs from "fs/promises";
 import { withIronSessionSsr } from "iron-session/next";
 import Head from "next/head";
-
-import { extractNoteData } from "../../utils/extractNoteData";
-import { filterAsync, mapAsync } from "../../utils/asyncArrayFunctions";
 import { NOTES_PATH } from "../../constants";
 import { ExpandedNote } from "../../types/index";
-import { Post } from "../../components/Post";
-import { fileFilter } from "../../utils/fileFilter";
 import dictionary from "../../public/resources/fileNameDictionary.json";
-import { Dictionary, rebuildDictionary } from "../../utils/rebuildDictionary";
-import { NavBar } from "../../components/NavBar";
-import { sessionOptions } from "../../utils/withSession";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
+import { extractNoteData, fileFilter } from "utils/serverUtils";
+import {
+  sessionOptions,
+  Dictionary,
+  rebuildDictionary,
+  filterAsync,
+  mapAsync,
+} from "utils";
+import { Post } from "../../components/Post";
+import { NavBar } from "../../components/NavBar";
 import { Search } from "../../components";
 
 const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {

@@ -6,18 +6,17 @@ import {
 } from "next";
 import { marked } from "marked";
 import { withIronSessionSsr } from "iron-session/next";
-import { ExpandedNote } from "../../types/index";
-
+import { NextParsedUrlQuery } from "next/dist/server/request-meta";
 import dictionary from "../../public/resources/slugDictionary.json";
+import { ExpandedNote } from "types/index";
 import {
   Dictionary,
   PostLookup,
   rebuildDictionary,
-} from "../../utils/rebuildDictionary";
-import { sessionOptions } from "../../utils/withSession";
+  sessionOptions,
+} from "utils";
+import { extractNoteData } from "utils/serverUtils";
 import { NavBar } from "../../components/NavBar";
-import { NextParsedUrlQuery } from "next/dist/server/request-meta";
-import { extractNoteData } from "../../utils/extractNoteData";
 
 const dict: Dictionary = rebuildDictionary(dictionary);
 const PostPage: NextPage<ExpandedNote> = (props) => {

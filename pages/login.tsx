@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import * as React from "react";
-import { extractFormKeyValue } from "../utils/extractFormKeyValue";
+import { extractFormKeyValue } from "utils";
 
 export type Props = {};
 

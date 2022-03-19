@@ -22,7 +22,6 @@ import { Card, NavBar, Search } from "../../components";
 import {
   ExpandedNote,
   isSearchQuery,
-  User,
   // SearchQuery,
   // isSearchQuery,
   // selectMetaFilterDictionary,
@@ -35,7 +34,7 @@ import { sessionOptions } from "utils/withSession";
 import { searchBuilder } from "../api/searchBuilder";
 
 const search = searchBuilder();
-// console.log(`searchIndex`, { search });
+
 type SearchResult = ExpandedNote;
 const SearchPage: NextPage<{ query: SearchResult[] }> = ({ query }) => {
   // - [] Add search results

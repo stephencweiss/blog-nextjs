@@ -1,10 +1,9 @@
 import { Document } from "flexsearch";
 import { FLEX_SEARCH_OPTIONS } from "../../constants";
 import { ExpandedNote } from "types/index";
-import { rebuildDictionary } from "../../utils/rebuildDictionary";
 import slugDictionary from "../../public/resources/slugDictionary.json";
 import { readPublicResource } from "utils/serverUtils";
-import { removeUndefined } from "utils";
+import { removeUndefined, rebuildDictionary } from "utils";
 
 const dictionary: Map<any, ExpandedNote> = rebuildDictionary(slugDictionary);
 const data = JSON.parse(readPublicResource("allData.json"));

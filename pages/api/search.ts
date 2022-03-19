@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withIronSessionApiRoute } from "iron-session/next";
-import { sessionOptions } from "../../utils/withSession";
+import { sessionOptions } from "utils";
 import { searchBuilder } from "./searchBuilder";
 
 const search = searchBuilder();
