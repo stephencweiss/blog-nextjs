@@ -1,4 +1,4 @@
-import { ExpandedNote } from "../types/post";
+import { ExpandedNote } from "../types/index";
 import fs from "fs";
 import path from "path";
 import { extractNoteData } from "../utils/extractNoteData";

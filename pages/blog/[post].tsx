@@ -6,7 +6,7 @@ import {
 } from "next";
 import { marked } from "marked";
 import { withIronSessionSsr } from "iron-session/next";
-import { ExpandedNote } from "../../types/post";
+import { ExpandedNote } from "../../types/index";
 
 import dictionary from "../../public/resources/slugDictionary.json";
 import {
