@@ -33,15 +33,8 @@ import Link from "next/link";
 import { createPillsFromNote } from "utils/pillHelpers";
 import { sessionOptions } from "utils/withSession";
 import { searchBuilder } from "../api/searchBuilder";
-const readPublicResource = (fileName: string) =>
-  fs.readFileSync(path.join(process.cwd(), "public/resources", fileName), {
-    encoding: "utf8",
-  });
 
-const slugDictionary = rebuildDictionary(dictionary);
-export const allData = JSON.parse(readPublicResource("allData.json"));
-
-const search = searchBuilder(allData, slugDictionary);
+const search = searchBuilder();
 // console.log(`searchIndex`, { search });
 type SearchResult = ExpandedNote;
 const SearchPage: NextPage<{ query: SearchResult[] }> = ({ query }) => {

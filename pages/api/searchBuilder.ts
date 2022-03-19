@@ -1,8 +1,14 @@
 import { Document } from "flexsearch";
 import { FLEX_SEARCH_OPTIONS } from "../../constants";
 import { ExpandedNote } from "types/index";
+import { rebuildDictionary } from "../../utils/rebuildDictionary";
+import slugDictionary from "../../public/resources/slugDictionary.json";
+import { readPublicResource } from "utils/serverUtils";
 
-export function searchBuilder(data: any, dictionary: Map<any, any>) {
+const dictionary = rebuildDictionary(slugDictionary);
+const data = JSON.parse(readPublicResource("allData.json"));
+
+export function searchBuilder() {
   function _buildSearchIndexes(
     data: ExpandedNote[],
     idx: Document<unknown, false>,

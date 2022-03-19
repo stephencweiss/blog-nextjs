@@ -1,20 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import fs from "fs";
-import path from "path";
 import { withIronSessionApiRoute } from "iron-session/next";
-import dictionary from "../../public/resources/slugDictionary.json";
 import { sessionOptions } from "../../utils/withSession";
-import { rebuildDictionary } from "../../utils/rebuildDictionary";
 import { searchBuilder } from "./searchBuilder";
-const slugDictionary = rebuildDictionary(dictionary);
 
-const readPublicResource = (fileName: string) =>
-  fs.readFileSync(path.join(process.cwd(), "public/resources", fileName), {
-    encoding: "utf8",
-  });
-
-const allData = JSON.parse(readPublicResource("allData.json"));
-const search = searchBuilder(allData, slugDictionary);
+const search = searchBuilder();
 
 function searchHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
