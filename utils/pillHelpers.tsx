@@ -19,7 +19,7 @@ export function createPill({
     id: `${type}-${id}`,
     path,
     component: (
-      <Component className={`pill ${type}`}>
+      <Component className={`pill ${type} ${path ? "link" : ""}`}>
         {id}
         {count ? `-${count}` : ""}
       </Component>
@@ -37,7 +37,7 @@ export function createPillsFromNote(note: ExpandedNote): PillProps[] {
       createPill({
         id: tag,
         type: "tag",
-        path: `/search?q=${tag}&type=search&target=tag`,
+        path: `/search?q=${tag}&type=search&target=tags`,
       })
     ) ?? [];
   const categoryPills =
