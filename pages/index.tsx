@@ -5,14 +5,14 @@ import Link from "next/link";
 
 const Home: NextPage<{}> = () => {
   return (
-    <div>
+    <div className="h-full">
       <Head>
         <title>Code Comments</title>
         <meta name="description" content="Notes on Life & Software" />
         <link rel="icon" href="/assets/initials.svg" />
       </Head>
-      <main>
-        <div className="center centerText fullPage">
+      <main className="h-full">
+        <div className="flex justify-center items-center text-center h-full">
           <div>
             <Link href="/blog" passHref>
               <Image
