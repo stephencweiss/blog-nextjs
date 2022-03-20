@@ -1,7 +1,7 @@
 import { ExpandedNote } from "../types/index";
 import fs from "fs";
 import path from "path";
-import { extractNoteData } from "utils/serverUtils";
+import { extractNoteData } from "../utils/serverUtils";
 import { NOTES_PATH } from "../constants";
 
 const fileFilter = (parentDir: string, fileName: string): boolean => {

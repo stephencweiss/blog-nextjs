@@ -15,7 +15,7 @@ import {
   rebuildDictionary,
   sessionOptions,
 } from "utils";
-import { extractNoteData } from "utils/serverUtils";
+import { extractNoteData } from "../../utils/serverUtils";
 import { NavBar } from "../../components/NavBar";
 
 const dict: Dictionary = rebuildDictionary(dictionary);
