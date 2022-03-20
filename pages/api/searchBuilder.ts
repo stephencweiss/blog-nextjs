@@ -11,8 +11,7 @@ const data = JSON.parse(readPublicResource("allData.json"));
 export function searchBuilder() {
   function _buildSearchIndexes(
     data: ExpandedNote[],
-    idx: Document<unknown, false>,
-    privateIdx = false
+    idx: Document<unknown, false>
   ) {
     data.forEach((entry) => {
       const {
@@ -38,24 +37,18 @@ export function searchBuilder() {
         content,
       };
 
-      if (privateIdx) {
-        isPrivate && idx.add(item);
-      }
       idx.add(item);
     });
   }
-  const publicIdx = new Document(FLEX_SEARCH_OPTIONS);
-  const privateIdx = new Document(FLEX_SEARCH_OPTIONS);
-  _buildSearchIndexes(data, publicIdx);
-  _buildSearchIndexes(data, privateIdx, true);
+  const searchIdx = new Document(FLEX_SEARCH_OPTIONS);
+
+  _buildSearchIndexes(data, searchIdx);
 
   return function search(
     query: string,
     isAdmin = false,
     indices?: ("tags" | "category")[]
   ): ExpandedNote[] {
-    const searchIdx = isAdmin ? privateIdx : publicIdx;
-
     if (!searchIdx) return [];
     const searchResults =
       searchIdx?.search({
@@ -69,7 +62,8 @@ export function searchBuilder() {
       ...new Set(searchResults.map((res) => res.result).flat()),
     ]
       .map((slug) => dictionary.get(slug))
-      .filter(removeUndefined);
+      .filter(removeUndefined)
+      .filter((note) => (isAdmin ? true : !note.isPrivate));
 
     return consolidated;
   };

@@ -30,7 +30,7 @@ export function createPill({
 export function createPillsFromNote(note: ExpandedNote): PillProps[] {
   const { isPrivate, tags, category } = note;
   const privatePills = isPrivate
-    ? [createPill({ id: "Private", type: "isPrivate" })]
+    ? [createPill({ id: "private", type: "isPrivate" })]
     : [];
   const tagPills =
     tags?.map((tag) =>
