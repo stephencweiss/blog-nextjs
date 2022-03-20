@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import Link from "next/link";
 import styles from "./Search.module.css";
 import { Card } from "../Card";
-import { ExpandedNote } from "types/post";
+import { ExpandedNote } from "types/index";
 import { createPillsFromNote } from "utils/pillHelpers";
 
 const searchEndpoint = (query: string) => `/api/search?query=${query}`;

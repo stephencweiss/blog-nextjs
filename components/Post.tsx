@@ -1,6 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
-import { ExpandedNote } from "../types/post";
+import { ExpandedNote } from "../types/index";
 import { Card } from "./Card";
 import { marked } from "marked";
 import { createPillsFromNote } from "utils/pillHelpers";

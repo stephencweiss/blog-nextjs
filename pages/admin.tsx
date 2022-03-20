@@ -2,7 +2,7 @@
 
 import { withIronSessionSsr } from "iron-session/next";
 import { NavBar } from "../components/NavBar";
-import { sessionOptions } from "../utils/withSession";
+import { sessionOptions } from "utils";
 
 function Page(props: any) {
   return (
