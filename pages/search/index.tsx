@@ -94,15 +94,9 @@ async function wrappableServerSideProps(
   }
 
   if (query.target === "search") {
-    const res = search(query.q, user?.admin);
-    // await textSearch();
-    console.log({ res });
-    return { props: { query: [] } };
+    return { props: { query: search(query.q, user?.admin) } };
   } else {
-    console.log(`Not Implemented -- `);
-    return {
-      props: { query: [] },
-    };
+    return { props: { query: search(query.q, user?.admin, [query.target]) } };
   }
 }
 

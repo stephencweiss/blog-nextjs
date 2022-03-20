@@ -2,7 +2,7 @@ import { Document } from "flexsearch";
 import { FLEX_SEARCH_OPTIONS } from "../../constants";
 import { ExpandedNote } from "types/index";
 import slugDictionary from "../../public/resources/slugDictionary.json";
-import { readPublicResource } from "utils/serverUtils";
+import { readPublicResource } from "../../utils/serverUtils";
 import { removeUndefined, rebuildDictionary } from "utils";
 
 const dictionary: Map<any, ExpandedNote> = rebuildDictionary(slugDictionary);
@@ -49,16 +49,21 @@ export function searchBuilder() {
   _buildSearchIndexes(data, publicIdx);
   _buildSearchIndexes(data, privateIdx, true);
 
-  return function search(query: string, isAdmin = false): ExpandedNote[] {
+  return function search(
+    query: string,
+    isAdmin = false,
+    indices?: ("tags" | "category")[]
+  ): ExpandedNote[] {
     const searchIdx = isAdmin ? privateIdx : publicIdx;
 
     if (!searchIdx) return [];
-    const searchResults = searchIdx.search({
-      query,
-      limit: 100,
-      suggest: true,
-      bool: "or",
-    });
+    const searchResults =
+      searchIdx?.search({
+        query,
+        index: indices,
+        limit: 100,
+        suggest: true,
+      }) ?? [];
 
     const consolidated = [
       ...new Set(searchResults.map((res) => res.result).flat()),
