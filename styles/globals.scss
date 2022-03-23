@@ -53,8 +53,17 @@ a:active {
 }
 
 .logo {
-  border-radius: 35%;
+  border-radius: 40%;
+  padding: 20px;
   background-color: var(--link-surface1);
+}
+
+.text1 {
+  color: var(--text1);
+}
+
+.text2 {
+  color: var(--text2);
 }
 
 .pills {

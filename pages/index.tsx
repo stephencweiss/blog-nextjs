@@ -7,17 +7,17 @@ const Home: NextPage<{}> = () => {
   return (
     <div className="h-full">
       <Head>
-        <title>Code Comments</title>
-        <meta name="description" content="Notes on Life & Software" />
+        <title>code comments</title>
+        <meta name="description" content="notes on software & life" />
         <link rel="icon" href="/assets/initials.svg" />
       </Head>
       <main className="h-full">
         <div className="flex justify-center items-center text-center h-full">
           <div>
-            <div>
+            <div className="mb-4 logo">
               <Link href={"/blog"} passHref>
                 <Image
-                  className="link logo"
+                  className="link"
                   height="250px"
                   width="250px"
                   objectFit="contain"
@@ -27,10 +27,14 @@ const Home: NextPage<{}> = () => {
               </Link>
             </div>
             <Link href={"/blog"} passHref>
-              <h1 className="link">{"/* Code Comments */"}</h1>
+              <h1 className="link text1 text-4xl font-bold">
+                {"/* code comments */"}
+              </h1>
             </Link>
-            <h2>Notes on Software and Life</h2>
-            <p>
+            <h2 className="text2 text-2xl font-semibold">
+              notes on software & life
+            </h2>
+            <p className="text2">
               <em>written by Stephen Weiss</em>
             </p>
           </div>
