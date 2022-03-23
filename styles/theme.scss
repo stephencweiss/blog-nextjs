@@ -83,23 +83,6 @@
   --link-surface-shadow-dark: var(--link-surface-hue) 10% 20%;
   --link-shadow-strength-dark: 0.8;
 
-  /* dim */
-  --brand-dim: hsl(var(--brand-hue) calc(var(--brand-saturation)/1.25) calc(var(--brand-lightness)/1.25))
-  --text1-dim: hsl(var(--brand-hue) 15% 75%);
-  --text2-dim: hsl(var(--brand-hue) 10% 61%);
-  --surface1-dim: hsl(var(--brand-hue) 10% 20%);
-  --surface2-dim: hsl(var(--brand-hue) 10% 25%);
-  --surface3-dim: hsl(var(--brand-hue) 5% 30%);
-  --surface4-dim: hsl(var(--brand-hue) 5% 35%);
-  --surface-shadow-dim: var(--brand-hue) 30% 13%;
-  --shadow-strength-dim: 0.2;
-  --link-dim: hsl(var(--link-hue) var(--link-saturation) calc(var(--link-lightness)*2));
-  --link-surface1-dim: hsl(var(--link-surface-hue-dark) var(--link-surface-saturation-dark) var(--link-surface-lightness-dark));
-  --link-surface2-dim: hsl(var(--link-surface-hue-dark) var(--link-surface-saturation-dark) 16%);
-  --link-surface3-dim: hsl(var(--link-surface-hue-dark) var(--link-surface-saturation-dark) 12%);
-  --link-surface4-dim: hsl(var(--link-surface-hue-dark) var(--link-surface-saturation-dark) 8%);
-  --link-surface-shadow-dim: var(--link-surface-hue) 10% 20%;
-  --link-shadow-strength-dim: 0.2;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -171,29 +154,4 @@
   --link-surface4: var(--link-surface4-dark);
   --link-surface-shadow: var(--link-surface-shadow-dark);
   --link-shadow-strength: var(--link-shadow-strength-dark);
-}
-
-[color-scheme="dim"] {
-  color-scheme: dim;
-
-  --brand: var(--brand-dim);
-  --text1: var(--text1-dim);
-  --text2: var(--text2-dim);
-
-  --surface1: var(--surface1-dim);
-  --surface2: var(--surface2-dim);
-  --surface3: var(--surface3-dim);
-  --surface4: var(--surface4-dim);
-  --surface-shadow: var(--surface-shadow-dim);
-  --shadow-strength: var(--shadow-strength-dim);
-
-  --link: var(--link-dim);
-  --link-hover: var(--link-dim-hover);
-  --link-surface1: var(--link-surface1-dim);
-  --link-surface2: var(--link-surface2-dim);
-  --link-surface3: var(--link-surface3-dim);
-  --link-surface4: var(--link-surface4-dim);
-  --link-surface-shadow: var(--link-surface-shadow-dim);
-  --link-shadow-strength: var(--link-shadow-strength-dim);
-
 }
