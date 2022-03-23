@@ -14,16 +14,18 @@ const Home: NextPage<{}> = () => {
       <main className="h-full">
         <div className="flex justify-center items-center text-center h-full">
           <div>
-            <Link href="/blog" passHref>
-              <Image
-                className="link"
-                height="200px"
-                width="200px"
-                objectFit="contain"
-                src="/assets/initials.svg"
-                alt={"logo of initials"}
-              />
-            </Link>
+            <div>
+              <Link href={"/blog"} passHref>
+                <Image
+                  className="link logo"
+                  height="250px"
+                  width="250px"
+                  objectFit="contain"
+                  src="/assets/initials.svg"
+                  alt={"logo of initials"}
+                />
+              </Link>
+            </div>
             <Link href={"/blog"} passHref>
               <h1 className="link">{"/* Code Comments */"}</h1>
             </Link>

@@ -2,25 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
+.link,
 a {
   color: inherit;
   text-decoration: none;
+  color: var(--link);
+  display: inline-block;
+  position: relative;
+}
+/* Animate a link on hover/focus/focus-within*/
+.link::after,
+a::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  transform-origin: bottom right;
+  transition: transform 0.4s cubic-bezier(0.86, 0, 0.07, 1);
+  background-color: var(--link);
 }
 
-* {
-  box-sizing: border-box;
+.link:hover::after,
+.link:focus::after,
+.link:focus-within::after,
+a:hover::after,
+a:focus::after,
+a:focus-within::after {
+  background-color: var(--link);
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+sup .link,
+sup a {
+  text-decoration: none;
+}
+
+.link:active,
+a:active {
+  outline: none;
 }
 
 .link {
   cursor: pointer;
+}
+
+.logo {
+  border-radius: 35%;
+  background-color: var(--link-surface1);
 }
 
 .pills {
@@ -36,13 +68,13 @@ a {
     padding-block: 2px;
   }
   & .isPrivate {
-    background-color: deeppink;
+    background-color: var(--link-surface1);
   }
   & .category {
-    background-color: aqua;
+    background-color: var(--link-surface2);
   }
   & .tag {
-    background-color: paleturquoise;
+    background-color: var(--link-surface3);
   }
 }
 
