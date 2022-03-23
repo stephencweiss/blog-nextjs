@@ -1,0 +1,181 @@
+// Adapted from https://web.dev/building-a-color-scheme/
+
+:root {
+  color-scheme: light;
+
+  /* set up defaults */
+  --brand-hue: 200;
+  --brand-saturation: 100%;
+  --brand-lightness: 50%;
+
+  --link-hue: 211;
+  --link-saturation: 100%;
+  --link-lightness: 36%;
+
+  --link-surface-hue: 50;
+  --link-surface-saturation: 100%;
+  --link-surface-lightness: 50%;
+
+  --link-surface-hue-dark: 208;
+  --link-surface-saturation-dark: 18%;
+  --link-surface-lightness-dark: 21%;
+
+  /*light*/
+  --brand-light: hsl(
+    var(--brand-hue) var(--brand-saturation) var(--brand-lightness)
+  );
+  --text1-light: hsl(var(--brand-hue) var(--brand-saturation) 10%);
+  --text2-light: hsl(var(--brand-hue) 30% 30%);
+  --surface1-light: hsl(var(--brand-hue) 25% 90%);
+  --surface2-light: hsl(var(--brand-hue) 20% 99%);
+  --surface3-light: hsl(var(--brand-hue) 20% 92%);
+  --surface4-light: hsl(var(--brand-hue) 20% 85%);
+  --surface-shadow-light: var(--brand-hue) 10% 20%;
+  --shadow-strength-light: 0.02;
+  --link-light: hsl(
+    var(--link-hue) var(--link-saturation) var(--link-lightness)
+  );
+  --link-surface1-light: hsl(
+    var(--link-surface-hue) var(--link-surface-saturation)
+      var(--link-surface-lightness)
+  );
+  --link-surface2-light: hsl(
+    var(--link-surface-hue) var(--link-surface-saturation) 60%
+  );
+  --link-surface3-light: hsl(
+    var(--link-surface-hue) var(--link-surface-saturation) 70%
+  );
+  --link-surface4-light: hsl(
+    var(--link-surface-hue) var(--link-surface-saturation) 80%
+  );
+  --link-surface-shadow-light: var(--link-surface-hue) 10% 20%;
+  --link-shadow-strength-light: 0.02;
+
+  /* dark */
+  --brand-dark: hsl(
+    var(--brand-hue) calc(var(--brand-saturation) / 2)
+      calc(var(--brand-lightness) / 1.5)
+  );
+  --text1-dark: hsl(var(--brand-hue) 15% 85%);
+  --text2-dark: hsl(var(--brand-hue) 5% 65%);
+  --surface1-dark: hsl(var(--brand-hue) 10% 10%);
+  --surface2-dark: hsl(var(--brand-hue) 10% 15%);
+  --surface3-dark: hsl(var(--brand-hue) 5% 20%);
+  --surface4-dark: hsl(var(--brand-hue) 5% 25%);
+  --surface-shadow-dark: var(--brand-hue) 50% 3%;
+  --shadow-strength-dark: 0.8;
+  --link-dark: hsl(
+    var(--link-hue) var(--link-saturation) calc(var(--link-lightness) * 2)
+  );
+  --link-surface1-dark: hsl(
+    var(--link-surface-hue-dark) var(--link-surface-saturation-dark)
+      var(--link-surface-lightness-dark)
+  );
+  --link-surface2-dark: hsl(
+    var(--link-surface-hue-dark) var(--link-surface-saturation-dark) 16%
+  );
+  --link-surface3-dark: hsl(
+    var(--link-surface-hue-dark) var(--link-surface-saturation-dark) 12%
+  );
+  --link-surface4-dark: hsl(
+    var(--link-surface-hue-dark) var(--link-surface-saturation-dark) 8%
+  );
+  --link-surface-shadow-dark: var(--link-surface-hue) 10% 20%;
+  --link-shadow-strength-dark: 0.8;
+
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --brand: var(--brand-dark);
+    --text1: var(--text1-dark);
+    --text2: var(--text2-dark);
+    --surface1: var(--surface1-dark);
+    --surface2: var(--surface2-dark);
+    --surface3: var(--surface3-dark);
+    --surface4: var(--surface4-dark);
+    --surface-shadow: var(--surface-shadow-dark);
+    --shadow-strength: var(--shadow-strength-dark);
+    --link: var(--link-dark);
+    --link-hover: var(--link-dark-hover);
+    --link-surface1: var(--link-surface1-dark);
+    --link-surface2: var(--link-surface2-dark);
+    --link-surface3: var(--link-surface3-dark);
+    --link-surface4: var(--link-surface4-dark);
+    --link-surface-shadow: var(--link-surface-shadow-dark);
+    --link-shadow-strength: var(--link-shadow-strength-dark);
+  }
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --brand: var(--brand-light);
+    --text1: var(--text1-light);
+    --text2: var(--text2-light);
+    --surface1: var(--surface1-light);
+    --surface2: var(--surface2-light);
+    --surface3: var(--surface3-light);
+    --surface4: var(--surface4-light);
+    --surface-shadow: var(--surface-shadow-light);
+    --shadow-strength: var(--shadow-strength-light);
+    --link: var(--link-light);
+    --link-hover: var(--link-light-hover);
+    --link-surface1: var(--link-surface1-light);
+    --link-surface2: var(--link-surface2-light);
+    --link-surface3: var(--link-surface3-light);
+    --link-surface4: var(--link-surface4-light);
+    --link-surface-shadow: var(--link-surface-shadow-light);
+    --link-shadow-strength: var(--link-shadow-strength-light);
+  }
+}
+
+/* Manually set the color scheme */
+
+[color-scheme="light"] {
+  color-scheme: light;
+
+  --brand: var(--brand-light);
+  --text1: var(--text1-light);
+  --text2: var(--text2-light);
+
+  --surface1: var(--surface1-light);
+  --surface2: var(--surface2-light);
+  --surface3: var(--surface3-light);
+  --surface4: var(--surface4-light);
+  --surface-shadow: var(--surface-shadow-light);
+  --shadow-strength: var(--shadow-strength-light);
+
+  --link: var(--link-light);
+  --link-hover: var(--link-light-hover);
+  --link-surface1: var(--link-surface1-light);
+  --link-surface2: var(--link-surface2-light);
+  --link-surface3: var(--link-surface3-light);
+  --link-surface4: var(--link-surface4-light);
+  --link-surface-shadow: var(--link-surface-shadow-light);
+  --link-shadow-strength: var(--link-shadow-strength-light);
+}
+
+[color-scheme="dark"] {
+  color-scheme: dark;
+
+  --brand: var(--brand-dark);
+  --text1: var(--text1-dark);
+  --text2: var(--text2-dark);
+
+  --surface1: var(--surface1-dark);
+  --surface2: var(--surface2-dark);
+  --surface3: var(--surface3-dark);
+  --surface4: var(--surface4-dark);
+  --surface-shadow: var(--surface-shadow-dark);
+  --shadow-strength: var(--shadow-strength-dark);
+
+  --link: var(--link-dark);
+  --link-hover: var(--link-dark-hover);
+  --link-surface1: var(--link-surface1-dark);
+  --link-surface2: var(--link-surface2-dark);
+  --link-surface3: var(--link-surface3-dark);
+  --link-surface4: var(--link-surface4-dark);
+  --link-surface-shadow: var(--link-surface-shadow-dark);
+  --link-shadow-strength: var(--link-shadow-strength-dark);
+}
