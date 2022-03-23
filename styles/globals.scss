@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+// TODO: Separate links in body from headers -- headers shouldn't be the same blue probably.
+
 .link,
 a {
   color: inherit;
