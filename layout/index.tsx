@@ -1,13 +1,11 @@
-import Sidebar from "@/components/Sidebar";
+import { Navigation } from "../components";
 import React, { ReactElement } from "react";
 
 export default function Layout({ children }: React.PropsWithChildren<any>) {
   return (
-    <div className="wrapper">
-      {/* <Navbar /> */}
-      <Sidebar />
-      <main>{children}</main>
-      {/* <Footer /> */}
+    <div className="with-nav">
+      <Navigation />
+      <main className="not-nav">{children}</main>
     </div>
   );
 }

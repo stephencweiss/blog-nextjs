@@ -20,8 +20,6 @@ import {
   mapAsync,
 } from "utils";
 import { Post } from "../../components/Post";
-import { NavBar } from "../../components/NavBar";
-import { Search } from "../../components";
 
 const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
   return (
@@ -33,8 +31,7 @@ const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
       </Head>
 
       <h1>Blog</h1>
-      <NavBar />
-      <Search />
+
       <>
         {posts.map((post: ExpandedNote) => (
           <Post key={post.slug} post={post} />

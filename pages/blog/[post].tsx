@@ -16,9 +16,6 @@ import {
   sessionOptions,
 } from "utils";
 import { extractNoteData } from "../../utils/serverUtils";
-import { NavBar } from "../../components/NavBar";
-import { formatDate } from "utils/formatters";
-import { useEffect, useState } from "react";
 import { useFormattedDates } from "hooks";
 
 // import hljs from "highlight.js/lib/common";
@@ -43,9 +40,8 @@ const PostPage: NextPage<ExpandedNote> = (props) => {
 
   return (
     <>
-      <NavBar />
       <div>
-        <h1 className="text1 text-4xl font-bold">{title}</h1>
+        <h1>{title}</h1>
         {postDate ? <p className="italic">Posted on {postDate}</p> : <></>}
         {updatedDate ? (
           <p className="italic">Last updated on {updatedDate}</p>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PillProps } from "@/components/Pill";
+import { PillProps } from "../components/Pill";
 import { ExpandedNote } from "types/index";
 export type PillInput = {
   id: string;

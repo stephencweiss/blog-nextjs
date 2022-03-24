@@ -15,10 +15,9 @@ type CardProps = {
 
 export function Card(props: CardProps) {
   const { pills, title, subheader, details, body, primaryAction, slug } = props;
-
   return (
     <div className="card">
-      <div className="post-date">{subheader}</div>
+      <p className="post-date">{subheader}</p>
       <Link href={slug} passHref>
         <h3 className="link">{title}</h3>
       </Link>

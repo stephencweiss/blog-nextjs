@@ -5,27 +5,68 @@
 // TODO: Separate links in body from headers -- headers shouldn't be the same blue probably.
 
 /* Typography */
+:root {
+  --ratio: 1.5;
+  --s-5: calc(var(--s-4) / var(--ratio));
+  --s-4: calc(var(--s-3) / var(--ratio));
+  --s-3: calc(var(--s-2) / var(--ratio));
+  --s-2: calc(var(--s-1) / var(--ratio));
+  --s-1: calc(var(--s0) / var(--ratio));
+  --s0: 1rem;
+  --s1: calc(var(--s0) * var(--ratio));
+  --s2: calc(var(--s1) * var(--ratio));
+  --s3: calc(var(--s2) * var(--ratio));
+  --s4: calc(var(--s3) * var(--ratio));
+  --s5: calc(var(--s4) * var(--ratio));
+
+  --measure: 60ch;
+}
+
+* {
+  max-width: var(--measure);
+}
+
+html,
+body,
+div,
+header,
+nav,
+main,
+footer {
+  max-width: none;
+}
 
 h1 {
-  @apply text-4xl font-bold pb-4;
+  font-size: var(--s3);
+  @apply font-bold pb-4;
+  font-weight: bold;
 }
 h2 {
   @apply text-3xl font-semibold pb-3;
+  font-size: var(--s2);
+  font-weight: bold;
 }
 h3 {
   @apply text-2xl;
+  font-size: var(--s1);
+  font-weight: lighter;
 }
 h4 {
   @apply text-xl;
+  font-size: var(--s-1);
+  font-weight: normal;
 }
 h5,
 h6 {
   @apply text-lg;
+  font-size: var(--s-1);
+  font-weight: bold;
 }
 
 p,
 li {
-  @apply text-base pb-1;
+  @apply pb-1;
+  font-size: var(--s0);
 }
 
 .link,
@@ -113,13 +154,20 @@ a:active {
   }
 }
 
-.wrapper {
+.with-nav {
   display: flex;
-  & main {
-    margin: 0 auto;
-    font-size: 24px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol";
-  }
+  flex-wrap: wrap;
+  align-items: stretch;
+  min-height: 100vh;
+}
+
+.nav {
+  flex-basis: 20rem;
+  flex-grow: 1;
+}
+
+.not-nav {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: 50%;
 }

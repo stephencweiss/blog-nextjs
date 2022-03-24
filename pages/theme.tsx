@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import { useEffect } from "react";
-import { NavBar } from "../components";
 
 const Theme: NextPage<{}> = () => {
   useEffect(() => {
@@ -15,7 +14,6 @@ const Theme: NextPage<{}> = () => {
 
   return (
     <>
-      <NavBar />
       <header>
         <h3>Scheme</h3>
         <form id="theme-switcher">
