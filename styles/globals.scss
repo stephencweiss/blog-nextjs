@@ -4,6 +4,30 @@
 
 // TODO: Separate links in body from headers -- headers shouldn't be the same blue probably.
 
+/* Typography */
+
+h1 {
+  @apply text-4xl font-bold pb-4;
+}
+h2 {
+  @apply text-3xl font-semibold pb-3;
+}
+h3 {
+  @apply text-2xl;
+}
+h4 {
+  @apply text-xl;
+}
+h5,
+h6 {
+  @apply text-lg;
+}
+
+p,
+li {
+  @apply text-base pb-1;
+}
+
 .link,
 a {
   color: inherit;
