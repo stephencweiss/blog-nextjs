@@ -31,16 +31,15 @@ const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
         <meta name="description" content="Notes on Life & Software" />
         <link rel="icon" href="/assets/initials.svg" />
       </Head>
-      <main>
-        <h1>Blog</h1>
-        <NavBar />
-        <Search />
-        <>
-          {posts.map((post: ExpandedNote) => (
-            <Post key={post.slug} post={post} />
-          ))}
-        </>
-      </main>
+
+      <h1>Blog</h1>
+      <NavBar />
+      <Search />
+      <>
+        {posts.map((post: ExpandedNote) => (
+          <Post key={post.slug} post={post} />
+        ))}
+      </>
     </div>
   );
 };
