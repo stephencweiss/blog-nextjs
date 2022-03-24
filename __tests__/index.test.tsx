@@ -9,7 +9,7 @@ describe("Home", () => {
       name: /code comments/i,
     });
     const subheading = screen.getByRole("heading", {
-      name: /notes on software and life/i,
+      name: /notes on software & life/i,
     });
 
     expect(heading).toBeInTheDocument();
