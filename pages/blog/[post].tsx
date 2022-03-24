@@ -19,27 +19,22 @@ import { extractNoteData } from "../../utils/serverUtils";
 import { NavBar } from "../../components/NavBar";
 import { formatDate } from "utils/formatters";
 import { useEffect, useState } from "react";
+import { useFormattedDates } from "hooks";
+
+// import hljs from "highlight.js/lib/common";
+// marked.setOptions({
+//   highlight: function (code, lang) {
+//     const language = hljs.getLanguage(lang) ? lang : "plaintext";
+//     return hljs.highlight(code, { language }).value;
+//   },
+//   langPrefix: "hljs language-",
+// });
 
 const dict: Dictionary = rebuildDictionary(dictionary);
 const PostPage: NextPage<ExpandedNote> = (props) => {
   const { content, title, date, updated, publish } = props;
-  const [postDate, setPostDate] = useState<string>();
-  const [updatedDate, setUpdatedDate] = useState<string>();
 
-  useEffect(() => {
-    try {
-      setPostDate(formatDate(publish ?? date));
-    } catch (e) {}
-  }, [date, publish]);
-
-  useEffect(() => {
-    try {
-      const latest = Array.isArray(updated)
-        ? updated[updated.length - 1]
-        : updated;
-      latest && setUpdatedDate(formatDate(latest));
-    } catch (e) {}
-  }, [updated]);
+  const { postDate, updatedDate } = useFormattedDates(props);
   // todo: format date
   // add categories
   // add tags
@@ -51,8 +46,12 @@ const PostPage: NextPage<ExpandedNote> = (props) => {
       <NavBar />
       <div>
         <h1 className="text1 text-4xl font-bold">{title}</h1>
-        {postDate ? <div>Posted on {postDate}</div> : <></>}
-        {updatedDate ? <div>Last updated on {updatedDate}</div> : <></>}
+        {postDate ? <p className="italic">Posted on {postDate}</p> : <></>}
+        {updatedDate ? (
+          <p className="italic">Last updated on {updatedDate}</p>
+        ) : (
+          <></>
+        )}
         <div className="post-body">
           <div dangerouslySetInnerHTML={{ __html: content }}></div>
         </div>
@@ -81,7 +80,6 @@ async function wrappableServerSideProps(
   }
   const { content } = note;
   const html = marked.parse(content);
-  console.log(JSON.stringify({ content, html }, null, 4));
 
   return { props: { ...note, content: html } };
 }
