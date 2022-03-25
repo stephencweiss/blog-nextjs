@@ -17,16 +17,18 @@ export function Card(props: CardProps) {
   const { pills, title, subheader, details, body, primaryAction, slug } = props;
   return (
     <div className="card">
-      <p className="post-date">{subheader}</p>
       <Link href={slug} passHref>
-        <h3 className="link">{title}</h3>
+        <h2 className="link">{title}</h2>
       </Link>
-      {pills?.length && (
+      <p className="post-date">{subheader}</p>
+      {pills?.length ? (
         <ul className="pills">
           {pills.map((pill) => (
             <Pill key={pill.id} {...pill} />
           ))}
         </ul>
+      ) : (
+        <></>
       )}
       {body}
       {details ? (
