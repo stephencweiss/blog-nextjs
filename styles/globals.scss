@@ -134,6 +134,7 @@ a:active {
 .pills {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   padding-inline-start: 4px;
   * + * {
     padding-inline-start: 4px;
@@ -169,5 +170,7 @@ a:active {
 .not-nav {
   flex-basis: 0;
   flex-grow: 999;
-  min-inline-size: 50%;
+  min-inline-size: 30%;
+  margin-left: 5em;
+  margin-right: 5em;
 }

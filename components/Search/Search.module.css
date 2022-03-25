@@ -1,12 +1,9 @@
 .container {
   position: relative;
+  max-width: var(--measure);
 }
 
 .search {
-  border: 1px solid #666;
-  box-sizing: border-box;
-  font-size: 18px;
-  padding: 18px;
   width: 100%;
 }
 

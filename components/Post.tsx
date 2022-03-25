@@ -20,7 +20,7 @@ export function Post({ post }: PostProps) {
       slug={`/blog/${slug}`}
       subheader={`Posted on ${postDate}`}
       details={marked(excerpt ?? "")}
-      pills={createPillsFromNote(post, 5)}
+      pills={createPillsFromNote(post)}
       primaryAction={
         <Link href={`/blog/${slug}`}>
           <a className="btn">Read More</a>
