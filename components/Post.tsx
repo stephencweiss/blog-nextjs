@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ExpandedNote } from "../types/index";
 import { Card } from "./Card";
 import { marked } from "marked";
-import { createPillsFromNote } from "utils/pillHelpers";
+import { createPill, createPillsFromNote } from "utils/pillHelpers";
 import { useFormattedDates } from "hooks";
 
 type PostProps = {
@@ -20,7 +20,7 @@ export function Post({ post }: PostProps) {
       slug={`/blog/${slug}`}
       subheader={`Posted on ${postDate}`}
       details={marked(excerpt ?? "")}
-      pills={createPillsFromNote(post)}
+      pills={createPillsFromNote(post, 5)}
       primaryAction={
         <Link href={`/blog/${slug}`}>
           <a className="btn">Read More</a>

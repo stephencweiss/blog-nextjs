@@ -27,19 +27,14 @@ export function createPill({
   };
 }
 
-export function createPillsFromNote(note: ExpandedNote): PillProps[] {
+export function createPillsFromNote(
+  note: ExpandedNote,
+  maxPillCount?: number
+): PillProps[] {
   const { isPrivate, tags, category } = note;
   const privatePills = isPrivate
     ? [createPill({ id: "private", type: "isPrivate" })]
     : [];
-  const tagPills =
-    tags?.map((tag) =>
-      createPill({
-        id: tag,
-        type: "tag",
-        path: `/search?q=${tag}&type=search&target=tags`,
-      })
-    ) ?? [];
   const categoryPills =
     category?.map((c) =>
       createPill({
@@ -48,5 +43,20 @@ export function createPillsFromNote(note: ExpandedNote): PillProps[] {
         path: `/search?q=${c}&type=search&target=category`,
       })
     ) ?? [];
-  return [...privatePills, ...categoryPills, ...tagPills];
+  const tagPills =
+    tags?.map((tag) =>
+      createPill({
+        id: tag,
+        type: "tag",
+        path: `/search?q=${tag}&type=search&target=tags`,
+      })
+    ) ?? [];
+  const pills = [...privatePills, ...categoryPills, ...tagPills];
+
+  if (maxPillCount && pills.length > maxPillCount) {
+    pills.splice(maxPillCount);
+    pills.push(createPill({ id: "...", type: "tag" }));
+  }
+
+  return pills;
 }
