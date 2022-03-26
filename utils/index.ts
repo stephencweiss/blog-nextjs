@@ -2,6 +2,7 @@ export * from "./asyncArrayFunctions";
 export * from "./createSlug";
 export * from "./extractFormKeyValue";
 export * from "./isValidDate";
+export * from "./markdownToHtml";
 export * from "./pillHelpers";
 export * from "./rebuildDictionary";
 export * from "./removeUndefined";

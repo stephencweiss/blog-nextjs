@@ -1,7 +1,7 @@
 import "../styles/theme.scss";
 import "../styles/reset.scss";
 import "../styles/globals.scss";
-import "prismjs/themes/prism-okaidia.min.css";
+import "prismjs/themes/prism-solarizedlight.css";
 
 import type { AppProps } from "next/app";
 import { NextPage } from "next";

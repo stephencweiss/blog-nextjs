@@ -11,21 +11,13 @@ import dictionary from "../../public/resources/slugDictionary.json";
 import { ExpandedNote } from "types/index";
 import {
   Dictionary,
+  markdownToHtml,
   PostLookup,
   rebuildDictionary,
   sessionOptions,
 } from "utils";
 import { extractNoteData } from "../../utils/serverUtils";
 import { useFormattedDates } from "hooks";
-
-// import hljs from "highlight.js/lib/common";
-// marked.setOptions({
-//   highlight: function (code, lang) {
-//     const language = hljs.getLanguage(lang) ? lang : "plaintext";
-//     return hljs.highlight(code, { language }).value;
-//   },
-//   langPrefix: "hljs language-",
-// });
 
 const dict: Dictionary = rebuildDictionary(dictionary);
 const PostPage: NextPage<ExpandedNote> = (props) => {
@@ -74,10 +66,10 @@ async function wrappableServerSideProps(
   if (note?.isPrivate && user?.admin !== true) {
     return { notFound: true };
   }
-  const { content } = note;
-  const html = marked.parse(content);
 
-  return { props: { ...note, content: html } };
+  const content = await markdownToHtml(note.content || "");
+
+  return { props: { ...note, content } };
 }
 
 export default PostPage;
