@@ -4,7 +4,6 @@ import {
   NextPage,
   PreviewData,
 } from "next";
-import { marked } from "marked";
 import { withIronSessionSsr } from "iron-session/next";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
 import dictionary from "../../public/resources/slugDictionary.json";
@@ -18,6 +17,7 @@ import {
 } from "utils";
 import { extractNoteData } from "../../utils/serverUtils";
 import { useFormattedDates } from "hooks";
+import { getPostLayout } from "layout/post";
 
 const dict: Dictionary = rebuildDictionary(dictionary);
 const PostPage: NextPage<ExpandedNote> = (props) => {
@@ -71,5 +71,9 @@ async function wrappableServerSideProps(
 
   return { props: { ...note, content } };
 }
+
+// TODO: figure out how to type the PostPage
+// (PostPage as any).getLayout = getPostLayout;
+PostPage.getLayout = getPostLayout;
 
 export default PostPage;
