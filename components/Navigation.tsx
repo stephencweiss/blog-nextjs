@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from "./Navigation.module.css";
+import styles from "./Navigation.module.scss";
 import { Search } from "./Search";
 
 export function Navigation() {

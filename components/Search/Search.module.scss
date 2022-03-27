@@ -1,6 +1,9 @@
 .container {
   position: relative;
   max-width: var(--measure);
+  & > input {
+    background-color: var(--surface2);
+  }
 }
 
 .search {
