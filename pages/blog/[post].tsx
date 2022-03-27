@@ -18,9 +18,10 @@ import {
 import { extractNoteData } from "../../utils/serverUtils";
 import { useFormattedDates } from "hooks";
 import { getPostLayout } from "layout/post";
+import { NextPageWithLayout } from "types";
 
 const dict: Dictionary = rebuildDictionary(dictionary);
-const PostPage: NextPage<ExpandedNote> = (props) => {
+const PostPage: NextPageWithLayout<ExpandedNote> = (props) => {
   const { content, title, date, updated, publish } = props;
 
   const { postDate, updatedDate } = useFormattedDates(props);
@@ -72,8 +73,6 @@ async function wrappableServerSideProps(
   return { props: { ...note, content } };
 }
 
-// TODO: figure out how to type the PostPage
-// (PostPage as any).getLayout = getPostLayout;
 PostPage.getLayout = getPostLayout;
 
 export default PostPage;
