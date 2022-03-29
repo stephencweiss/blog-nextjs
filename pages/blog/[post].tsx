@@ -10,11 +10,12 @@ import dictionary from "../../public/resources/slugDictionary.json";
 import { ExpandedNote } from "types/index";
 import {
   Dictionary,
-  markdownToHtml,
   PostLookup,
   rebuildDictionary,
   sessionOptions,
 } from "utils";
+
+import { markdownToHtml } from "../../utils/serverUtils";
 import { extractNoteData } from "../../utils/serverUtils";
 import { useFormattedDates } from "hooks";
 import { getPostLayout } from "layout/post";
