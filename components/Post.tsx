@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ExpandedNote } from "../types/index";
 import { Card } from "./Card";
 import { marked } from "marked";
-import { createPill, createPillsFromNote } from "utils/pillHelpers";
+import { createPillsFromNote } from "utils/pillHelpers";
 import { useFormattedDates } from "hooks";
 
 type PostProps = {
@@ -22,9 +22,14 @@ export function Post({ post }: PostProps) {
       details={marked(excerpt ?? "")}
       pills={createPillsFromNote(post)}
       primaryAction={
-        <Link href={`/blog/${slug}`}>
-          <a className="btn">Read More</a>
-        </Link>
+        <div
+          className="max-width"
+          style={{ display: "flex", flexDirection: "row-reverse" }}
+        >
+          <Link href={`/blog/${slug}`}>
+            <a className="btn">Read More &#10149;</a>
+          </Link>
+        </div>
       }
     />
   );

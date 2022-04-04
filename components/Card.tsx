@@ -16,11 +16,11 @@ type CardProps = {
 export function Card(props: CardProps) {
   const { pills, title, subheader, details, body, primaryAction, slug } = props;
   return (
-    <div>
+    <div className="max-width">
       <Link href={slug} passHref>
-        <h2 className="link">{title}</h2>
+        <h2 className="link card-title">{title}</h2>
       </Link>
-      <p className="post-date">{subheader}</p>
+      <p className="italic">{subheader}</p>
       {pills?.length ? (
         <ul className="pills">
           {pills.map((pill) => (
