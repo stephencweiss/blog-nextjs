@@ -25,7 +25,8 @@
     "react-dom": "17.0.2",
     "remark": "12.0.1",
     "remark-html": "13.0.1",
-    "remark-prism": "1.1.14"
+    "remark-prism": "1.1.14",
+    "tailwindcss-owl": "^2.0.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.0.0",

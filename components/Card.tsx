@@ -16,7 +16,7 @@ type CardProps = {
 export function Card(props: CardProps) {
   const { pills, title, subheader, details, body, primaryAction, slug } = props;
   return (
-    <div className="card">
+    <div>
       <Link href={slug} passHref>
         <h2 className="link">{title}</h2>
       </Link>
