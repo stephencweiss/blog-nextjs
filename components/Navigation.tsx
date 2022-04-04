@@ -13,9 +13,9 @@ export function Navigation() {
         <Link href="/blog">
           <a>blog</a>
         </Link>
-        <Link href="/theme">
+        {/* <Link href="/theme">
           <a>theme</a>
-        </Link>
+        </Link> */}
         <Link href="/login">
           <a>login</a>
         </Link>
