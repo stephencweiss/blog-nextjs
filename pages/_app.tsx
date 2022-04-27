@@ -1,5 +1,6 @@
 import "../styles/theme.scss";
 import "../styles/reset.scss";
+import "../styles/utilities.scss";
 import "../styles/globals.scss";
 import "prismjs/themes/prism-solarizedlight.min.css";
 import "prismjs/plugins/autolinker/prism-autolinker.min.css";
