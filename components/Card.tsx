@@ -18,7 +18,7 @@ export function Card(props: CardProps) {
   return (
     <div className="max-width">
       <Link href={slug} passHref>
-        <h2 className="link card-title">{title}</h2>
+        <h2 className="capitalize link card-title">{title}</h2>
       </Link>
       <p className="italic">{subheader}</p>
       {pills?.length ? (
