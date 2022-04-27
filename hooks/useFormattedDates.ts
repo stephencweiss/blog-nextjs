@@ -9,7 +9,9 @@ export function useFormattedDates({ date, publish, updated }: ExpandedNote) {
   useEffect(() => {
     try {
       setPostDate(formatDate(publish ?? date));
-    } catch (e) {}
+    } catch (e) {
+      // TODO: Add logging on invalid dates
+    }
   }, [date, publish]);
 
   useEffect(() => {
@@ -18,7 +20,9 @@ export function useFormattedDates({ date, publish, updated }: ExpandedNote) {
         ? updated[updated.length - 1]
         : updated;
       latest && setUpdatedDate(formatDate(latest));
-    } catch (e) {}
+    } catch (e) {
+      // TODO: Add logging on invalid dates
+    }
   }, [updated]);
   return { postDate, updatedDate };
 }
