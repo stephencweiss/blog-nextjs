@@ -64,7 +64,7 @@ export function Search() {
                   pills={createPillsFromNote(res)}
                   primaryAction={
                     <Link href={`/blog/${slug}`}>
-                      <a>Read More</a>
+                      <a>Read More &#10149;</a>
                     </Link>
                   }
                 />

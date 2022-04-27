@@ -22,10 +22,7 @@ export function Post({ post }: PostProps) {
       details={marked(excerpt ?? "")}
       pills={createPillsFromNote(post)}
       primaryAction={
-        <div
-          className="max-width"
-          style={{ display: "flex", flexDirection: "row-reverse" }}
-        >
+        <div className="max-width flex flex-row-reverse">
           <Link href={`/blog/${slug}`}>
             <a className="btn">Read More &#10149;</a>
           </Link>

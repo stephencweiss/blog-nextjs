@@ -29,11 +29,11 @@ const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
         <meta name="description" content="Notes on Life & Software" />
         <link rel="icon" href="/assets/initials.svg" />
       </Head>
-      <div className="prose">
-        <h1 className="mt-10">Blog</h1>
+      <div className="page-title-spacer">
+        <h1 className="page-title">Blog</h1>
       </div>
 
-      <div className="o-8">
+      <div className="oo-8">
         {posts.map((post: ExpandedNote) => (
           <Post key={post.slug} post={post} />
         ))}
@@ -79,6 +79,6 @@ export const getServerSideProps = withIronSessionSsr(async function (
     async (file) => await extractNoteData(file, true)
   );
   // TODO: Remove the slice
-  return { props: { posts: posts.slice(0, 100) } };
+  return { props: { posts: posts } };
 },
 sessionOptions);
