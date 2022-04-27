@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 // TODO: Separate links in body from headers -- headers shouldn't be the same blue probably.
-
 /* Typography */
 :root {
   --ratio: 1.5;
@@ -126,7 +125,11 @@ a:active {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  & > * { margin-top: 4px; }
+  padding-left: 0;
+  & > * {
+    margin-top: 4px;
+    padding-inline-start: 0;
+  }
   * + * {
     padding-inline-start: 4px;
   }
@@ -147,10 +150,21 @@ a:active {
 }
 
 .card-title {
-  font-size: var(--s1) ;
+  font-size: var(--s1);
   color: var(--text1);
 }
 
 .max-width {
   max-width: var(--measure);
+}
+
+.page-title-spacer {
+  margin-top: 2.5rem;
+  margin-bottom: 2rem;
+}
+.page-title {
+  font-size: var(--s2);
+  // margin-top: 1rem;
+  // margin-bottom: 2rem;
+  font-weight: 800;
 }

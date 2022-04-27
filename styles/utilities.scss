@@ -1,0 +1,227 @@
+// display
+.h-full {
+  height: 100%;
+}
+
+// typography
+.fw-600 {
+  font-weight: 600;
+}
+
+.fw-800 {
+  font-weight: 800;
+}
+
+.fw-bold {
+  font-weight: bold;
+}
+.text-center {
+  text-align: center;
+}
+.italic {
+  font-style: italic;
+}
+.list-none {
+  list-style-type: none;
+}
+.capitalize {
+  text-transform: capitalize;
+}
+// flex
+.flex {
+  display: flex;
+}
+.flex-row {
+  flex-direction: row;
+}
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+.items-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
+}
+
+// margin
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.mt-7 {
+  margin-top: 1.75rem;
+}
+
+.mt-8 {
+  margin-top: 2rem;
+}
+
+.mt-9 {
+  margin-top: 2.25rem;
+}
+
+.mt-10 {
+  margin-top: 2.5rem;
+}
+
+.mt-11 {
+  margin-top: 2.75rem;
+}
+
+.mt-12 {
+  margin-top: 3rem;
+}
+
+.mt-14 {
+  margin-top: 3.5rem;
+}
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.mb-7 {
+  margin-bottom: 1.75rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.mb-9 {
+  margin-bottom: 2.25rem;
+}
+
+.mb-10 {
+  margin-bottom: 2.5rem;
+}
+
+.mb-11 {
+  margin-bottom: 2.75rem;
+}
+
+.mb-12 {
+  margin-bottom: 3rem;
+}
+
+.mb-14 {
+  margin-bottom: 3.5rem;
+}
+// lobotomized owl
+.owl-1 {
+  > * + * {
+    margin-top: 0.25rem;
+  }
+}
+
+.owl-2 {
+  > * + * {
+    margin-top: 0.5rem;
+  }
+}
+
+.owl-3 {
+  > * + * {
+    margin-top: 0.75rem;
+  }
+}
+
+.owl-4 {
+  > * + * {
+    margin-top: 1rem;
+  }
+}
+
+.owl-5 {
+  > * + * {
+    margin-top: 1.25rem;
+  }
+}
+
+.owl-6 {
+  > * + * {
+    margin-top: 1.5rem;
+  }
+}
+
+.owl-7 {
+  > * + * {
+    margin-top: 1.75rem;
+  }
+}
+
+.owl-8 {
+  > * + * {
+    margin-top: 2rem;
+  }
+}
+
+.owl-9 {
+  > * + * {
+    margin-top: 2.25rem;
+  }
+}
+
+.owl-10 {
+  > * + * {
+    margin-top: 2.5rem;
+  }
+}
+
+.owl-11 {
+  > * + * {
+    margin-top: 2.75rem;
+  }
+}
+
+.owl-12 {
+  > * + * {
+    margin-top: 3rem;
+  }
+}
+
+.owl-14 {
+  > * + * {
+    margin-top: 3.5rem;
+  }
+}
