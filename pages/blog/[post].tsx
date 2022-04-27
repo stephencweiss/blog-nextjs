@@ -1,51 +1,94 @@
 import {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
-  NextPage,
   PreviewData,
 } from "next";
 import { withIronSessionSsr } from "iron-session/next";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
 import dictionary from "../../public/resources/slugDictionary.json";
-import { ExpandedNote } from "types/index";
+import fileDictionary from "../../public/resources/fileNameDictionary.json";
 import {
+  createPillsFromNote,
   Dictionary,
   PostLookup,
   rebuildDictionary,
+  removeUndefined,
   sessionOptions,
 } from "utils";
-
-import { markdownToHtml } from "../../utils/serverUtils";
-import { extractNoteData } from "../../utils/serverUtils";
+import { Pill, Post } from "../../components";
+import { extractNoteData, markdownToHtml } from "../../utils/serverUtils";
 import { useFormattedDates } from "hooks";
 import { getPostLayout } from "layout/post";
+import { ExpandedNote, User } from "types/index";
 import { NextPageWithLayout } from "types";
 
 const dict: Dictionary = rebuildDictionary(dictionary);
-const PostPage: NextPageWithLayout<ExpandedNote> = (props) => {
-  const { content, title, date, updated, publish } = props;
+const fnDict: Dictionary = rebuildDictionary(fileDictionary);
 
+function enhanceBacklinks(note: ExpandedNote, user?: User): ExpandedNote[] {
+  const backlinks = note.backlinks ?? [];
+
+  if (backlinks?.length === 0) {
+    return [];
+  }
+
+  const base = backlinks.map((b) => b.file?.base);
+  const files = [...new Set(base)];
+
+  return files
+    .map((file) => fnDict.get(file))
+    .filter(removeUndefined)
+    .filter((item) => filterPrivate(item, user))
+    .map((backlink) => extractNoteData(backlink.fileName, true));
+}
+
+function filterPrivate(item: { isPrivate: boolean }, user?: User) {
+  return user?.admin ? true : !item.isPrivate;
+}
+
+const PostPage: NextPageWithLayout<ExpandedNote> = (props) => {
+  const { content, title, enhancedBacklinks, date, updated, publish } = props;
+
+  const pills = createPillsFromNote(props);
   const { postDate, updatedDate } = useFormattedDates(props);
   // todo: format date
-  // add categories
-  // add tags
-  // style code
-  // add backlinks
+  const backlinksSection =
+    enhancedBacklinks?.length ?? 0 > 0 ? (
+      <div>
+        <hr />
+        <h1>Related Notes</h1>
+        <div className="pills">
+          {enhancedBacklinks?.map((eb) => (
+            <Post key={eb.slug} post={eb} />
+          ))}
+        </div>
+      </div>
+    ) : (
+      <></>
+    );
 
   return (
     <>
-      <div>
-        <h1>{title}</h1>
+      <div className="post-container">
+        <h1 className="capitalize">{title}</h1>
         {postDate ? <p className="italic">Posted on {postDate}</p> : <></>}
         {updatedDate ? (
           <p className="italic">Last updated on {updatedDate}</p>
         ) : (
           <></>
         )}
+        <div className="pills">
+          {pills.map((pill) => (
+            <Pill key={pill.id} {...pill} />
+          ))}
+        </div>
+
         <div className="post-body">
           <div dangerouslySetInnerHTML={{ __html: content }}></div>
         </div>
       </div>
+
+      {backlinksSection}
     </>
   );
 };
@@ -71,7 +114,12 @@ async function wrappableServerSideProps(
 
   const content = await markdownToHtml(note.content || "");
 
-  return { props: { ...note, content } };
+  const expandedNote = {
+    ...note,
+    content,
+    enhancedBacklinks: enhanceBacklinks(note, user),
+  };
+  return { props: { ...expandedNote } };
 }
 
 PostPage.getLayout = getPostLayout;

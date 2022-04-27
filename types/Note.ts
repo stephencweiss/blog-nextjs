@@ -2,6 +2,7 @@ export type ExpandedNote = Note &
   Frontmatter & {
     slug: string;
     fileName: string;
+    enhancedBacklinks?: ExpandedNote[];
   };
 
 type Note = {
@@ -9,7 +10,7 @@ type Note = {
   excerpt?: string;
 };
 
-type Backlink = {
+export type Backlink = {
   file: {
     base: string;
     dir: string;
