@@ -33,7 +33,7 @@ export function Card(props: CardProps) {
       {body}
       {details ? (
         <div
-          className="details"
+          className="details post-container"
           dangerouslySetInnerHTML={{ __html: details }}
         />
       ) : (

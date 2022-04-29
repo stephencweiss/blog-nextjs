@@ -50,7 +50,7 @@ footer {
 .not-nav {
   flex-basis: 0;
   flex-grow: 999;
-  min-inline-size: 30%;
+  min-inline-size: 50%;
   margin-left: 5em;
   margin-right: 5em;
 }
@@ -167,4 +167,12 @@ a:active {
   // margin-top: 1rem;
   // margin-bottom: 2rem;
   font-weight: 800;
+}
+
+.post-container {
+  & > video,
+  & > iframe {
+    // This is just a gross hack
+    max-width: calc(var(--measure) * 0.5);
+  }
 }
