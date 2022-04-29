@@ -5,8 +5,8 @@ import {
 } from "next";
 import { withIronSessionSsr } from "iron-session/next";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
-import dictionary from "../../public/resources/slugDictionary.json";
-import fileDictionary from "../../public/resources/fileNameDictionary.json";
+import dictionary from "../public/resources/slugDictionary.json";
+import fileDictionary from "../public/resources/fileNameDictionary.json";
 import {
   createPillsFromNote,
   Dictionary,
@@ -15,8 +15,8 @@ import {
   removeUndefined,
   sessionOptions,
 } from "utils";
-import { Pill, Post } from "../../components";
-import { extractNoteData, markdownToHtml } from "../../utils/serverUtils";
+import { Pill, Post } from "../components";
+import { extractNoteData, markdownToHtml } from "../utils/serverUtils";
 import { useFormattedDates } from "hooks";
 import { getPostLayout } from "layout/post";
 import { ExpandedNote, User } from "types/index";

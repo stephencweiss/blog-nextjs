@@ -17,13 +17,13 @@ export function Post({ post }: PostProps) {
   return (
     <Card
       title={title}
-      slug={`/blog/${slug}`}
+      slug={`/${slug}`}
       subheader={`Posted on ${postDate}`}
       details={marked(excerpt ?? "")}
       pills={createPillsFromNote(post)}
       primaryAction={
         <div className="max-width flex flex-row-reverse">
-          <Link href={`/blog/${slug}`}>
+          <Link href={`/${slug}`}>
             <a className="btn">Read More &#10149;</a>
           </Link>
         </div>
