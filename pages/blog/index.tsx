@@ -78,7 +78,6 @@ export const getServerSideProps = withIronSessionSsr(async function (
     publicPosts,
     async (file) => await extractNoteData(file, true)
   );
-  // TODO: Remove the slice
-  return { props: { posts: posts } };
+  return { props: { posts: posts.slice(0, 10) } };
 },
 sessionOptions);
