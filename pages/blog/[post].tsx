@@ -8,17 +8,42 @@ import { marked } from "marked";
 import { withIronSessionSsr } from "iron-session/next";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
 import dictionary from "../../public/resources/slugDictionary.json";
-import { ExpandedNote } from "types/index";
+import fnDictionary from "../../public/resources/fileNameDictionary.json";
+import { ExpandedNote, User } from "types/index";
 import {
   Dictionary,
   PostLookup,
   rebuildDictionary,
+  removeUndefined,
   sessionOptions,
 } from "utils";
 import { extractNoteData } from "../../utils/serverUtils";
 import { NavBar } from "../../components/NavBar";
 
 const dict: Dictionary = rebuildDictionary(dictionary);
+const fnDict: Dictionary = rebuildDictionary(fnDictionary);
+
+function enhanceBacklinks(note: ExpandedNote, user?: User): ExpandedNote[] {
+  const backlinks = note.backlinks ?? [];
+
+  if (backlinks?.length === 0) {
+    return [];
+  }
+
+  const base = backlinks.map((b) => b.file?.base);
+  const files = [...new Set(base)];
+
+  return files
+    .map((file) => fnDict.get(file))
+    .filter(removeUndefined)
+    .filter((item) => filterPrivate(item, user))
+    .map((backlink) => extractNoteData(backlink.fileName, true));
+}
+
+function filterPrivate(item: { isPrivate: boolean }, user?: User) {
+  return user?.admin ? true : !item.isPrivate;
+}
+
 const PostPage: NextPage<ExpandedNote> = (props) => {
   const { content, title, date } = props;
   return (
@@ -55,7 +80,16 @@ async function wrappableServerSideProps(
     return { notFound: true };
   }
 
-  return { props: { ...note } };
+  // const content = await markdownToHtml(note.content || "");
+
+  const expandedNote = {
+    ...note,
+    // content,
+    enhancedBacklinks: enhanceBacklinks(note, user),
+  };
+  return { props: { ...expandedNote } };
+
+  // return { props: { ...note } };
 }
 
 export default PostPage;
