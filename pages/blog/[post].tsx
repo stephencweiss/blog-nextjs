@@ -17,7 +17,7 @@ import {
   removeUndefined,
   sessionOptions,
 } from "utils";
-import { extractNoteData } from "../../utils/serverUtils";
+import { extractNoteData, markdownToHtml } from "../../utils/serverUtils";
 import { NavBar } from "../../components/NavBar";
 
 const dict: Dictionary = rebuildDictionary(dictionary);
@@ -99,11 +99,11 @@ async function wrappableServerSideProps(
     return { notFound: true };
   }
 
-  // const content = await markdownToHtml(note.content || "");
+  const content = await markdownToHtml(note.content || "");
 
   const expandedNote = {
     ...note,
-    // content,
+    content,
     enhancedBacklinks: enhanceBacklinks(note, user),
   };
   return { props: { ...expandedNote } };
