@@ -45,7 +45,25 @@ function filterPrivate(item: { isPrivate: boolean }, user?: User) {
 }
 
 const PostPage: NextPage<ExpandedNote> = (props) => {
-  const { content, title, date } = props;
+  const { content, title, date, enhancedBacklinks } = props;
+
+  const backlinksSection =
+    enhancedBacklinks?.length ?? 0 > 0 ? (
+      <div>
+        <hr />
+        <h1>Related Notes</h1>
+        <div className="pills">
+          <ul>
+            {enhancedBacklinks?.map((eb) => (
+              // <Post key={eb.slug} post={eb} />
+              <li key={eb.slug}>{JSON.stringify(eb, null, 4)}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    ) : (
+      <></>
+    );
   return (
     <>
       <NavBar />
@@ -55,6 +73,7 @@ const PostPage: NextPage<ExpandedNote> = (props) => {
         <div>
           <div dangerouslySetInnerHTML={{ __html: marked(content) }}></div>
         </div>
+        {backlinksSection}
       </div>
     </>
   );
