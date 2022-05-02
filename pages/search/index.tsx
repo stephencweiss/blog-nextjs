@@ -18,7 +18,7 @@ import { withIronSessionSsr } from "iron-session/next";
 //   sessionOptions,
 // } from "../../utils";
 
-import { Card, NavBar, Search } from "../../components";
+import { Card } from "../../components";
 import {
   ExpandedNote,
   isSearchQuery,
@@ -49,9 +49,8 @@ const SearchPage: NextPage<{ query: SearchResult[] }> = ({ query }) => {
         <link rel="icon" href="/assets/initials.svg" />
       </Head>
       <main>
-        <h1>Blog</h1>
-        <NavBar />
-        <Search />
+        <h1>Search</h1>
+
         <>
           {query.map((entry) => {
             const { title, excerpt, slug } = entry;

@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import Link from "next/link";
-import styles from "./Search.module.css";
+import styles from "./Search.module.scss";
 import { Card } from "../Card";
 import { ExpandedNote } from "types/index";
 import { createPillsFromNote } from "utils/pillHelpers";
@@ -64,7 +64,7 @@ export function Search() {
                   pills={createPillsFromNote(res)}
                   primaryAction={
                     <Link href={`/blog/${slug}`}>
-                      <a>Read More</a>
+                      <a>Read More &#10149;</a>
                     </Link>
                   }
                 />

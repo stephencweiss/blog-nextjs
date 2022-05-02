@@ -15,24 +15,25 @@ type CardProps = {
 
 export function Card(props: CardProps) {
   const { pills, title, subheader, details, body, primaryAction, slug } = props;
-
   return (
-    <div className="card">
-      <div className="post-date">{subheader}</div>
+    <div className="max-width">
       <Link href={slug} passHref>
-        <h3 className="link">{title}</h3>
+        <h2 className="capitalize link card-title">{title}</h2>
       </Link>
-      {pills?.length && (
+      <p className="italic">{subheader}</p>
+      {pills?.length ? (
         <ul className="pills">
           {pills.map((pill) => (
             <Pill key={pill.id} {...pill} />
           ))}
         </ul>
+      ) : (
+        <></>
       )}
       {body}
       {details ? (
         <div
-          className="details"
+          className="details post-container"
           dangerouslySetInnerHTML={{ __html: details }}
         />
       ) : (

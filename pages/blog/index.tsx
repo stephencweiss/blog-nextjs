@@ -20,8 +20,6 @@ import {
   mapAsync,
 } from "utils";
 import { Post } from "../../components/Post";
-import { NavBar } from "../../components/NavBar";
-import { Search } from "../../components";
 
 const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
   return (
@@ -31,16 +29,15 @@ const Blog: NextPage<{ posts: ExpandedNote[] }> = ({ posts }) => {
         <meta name="description" content="Notes on Life & Software" />
         <link rel="icon" href="/assets/initials.svg" />
       </Head>
-      <main>
-        <h1>Blog</h1>
-        <NavBar />
-        <Search />
-        <>
-          {posts.map((post: ExpandedNote) => (
-            <Post key={post.slug} post={post} />
-          ))}
-        </>
-      </main>
+      <div className="page-title-spacer">
+        <h1 className="page-title">Blog</h1>
+      </div>
+
+      <div className="oo-8">
+        {posts.map((post: ExpandedNote) => (
+          <Post key={post.slug} post={post} />
+        ))}
+      </div>
     </div>
   );
 };
@@ -81,7 +78,6 @@ export const getServerSideProps = withIronSessionSsr(async function (
     publicPosts,
     async (file) => await extractNoteData(file, true)
   );
-
-  return { props: { posts } };
+  return { props: { posts: posts.slice(0, 10) } };
 },
 sessionOptions);

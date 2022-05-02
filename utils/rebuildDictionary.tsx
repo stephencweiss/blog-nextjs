@@ -5,6 +5,15 @@ export type PostLookup = {
   stage: string;
   slug: string;
   isPrivate: boolean;
+  title: string;
+  excerpt: string;
+  // present in allData
+  updated?: string[];
+  date?: string;
+  publish?: string;
+  content?: string;
+  tags?: string[];
+  category?: string[];
 };
 
 export function rebuildDictionary(flattenedDictionary: any) {

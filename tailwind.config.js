@@ -1,7 +1,13 @@
 module.exports = {
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./layout/**/*.{ts,tsx}",
+    // "./**/*.{ts,tsx}",
+  ],
+  mode: "jit",
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography"), require("tailwindcss-owl")],
 };

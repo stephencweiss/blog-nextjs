@@ -3,6 +3,61 @@
 @tailwind utilities;
 
 // TODO: Separate links in body from headers -- headers shouldn't be the same blue probably.
+/* Typography */
+:root {
+  --ratio: 1.5;
+  --s-5: calc(var(--s-4) / var(--ratio));
+  --s-4: calc(var(--s-3) / var(--ratio));
+  --s-3: calc(var(--s-2) / var(--ratio));
+  --s-2: calc(var(--s-1) / var(--ratio));
+  --s-1: calc(var(--s0) / var(--ratio));
+  --s0: 1rem;
+  --s1: calc(var(--s0) * var(--ratio));
+  --s2: calc(var(--s1) * var(--ratio));
+  --s3: calc(var(--s2) * var(--ratio));
+  --s4: calc(var(--s3) * var(--ratio));
+  --s5: calc(var(--s4) * var(--ratio));
+
+  --measure: 60ch;
+}
+
+* {
+  max-width: var(--measure);
+}
+
+html,
+body,
+div,
+header,
+nav,
+main,
+footer {
+  max-width: none;
+}
+
+.with-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  min-height: 100vh;
+}
+
+.nav {
+  flex-basis: 20rem;
+  flex-grow: 1;
+}
+
+.not-nav {
+  flex-basis: 0;
+  flex-grow: 999;
+  min-inline-size: 30%;
+  margin-left: 5em;
+  margin-right: 5em;
+}
+
+article {
+  @apply prose;
+}
 
 .link,
 a {
@@ -69,7 +124,12 @@ a:active {
 .pills {
   display: flex;
   flex-direction: row;
-  padding-inline-start: 4px;
+  flex-wrap: wrap;
+  padding-left: 0;
+  & > * {
+    margin-top: 4px;
+    padding-inline-start: 0;
+  }
   * + * {
     padding-inline-start: 4px;
   }
@@ -89,6 +149,30 @@ a:active {
   }
 }
 
-.pill-item {
-  list-style: none;
+.card-title {
+  font-size: var(--s1);
+  color: var(--text1);
+}
+
+.max-width {
+  max-width: var(--measure);
+}
+
+.page-title-spacer {
+  margin-top: 2.5rem;
+  margin-bottom: 2rem;
+}
+.page-title {
+  font-size: var(--s2);
+  // margin-top: 1rem;
+  // margin-bottom: 2rem;
+  font-weight: 800;
+}
+
+.post-container {
+  & > video,
+  & > iframe {
+    // This is just a gross hack
+    max-width: calc(var(--measure) * 0.5);
+  }
 }

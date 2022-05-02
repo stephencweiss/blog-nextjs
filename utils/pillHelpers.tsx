@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PillProps } from "@/components/Pill";
+import { PillProps } from "../components/Pill";
 import { ExpandedNote } from "types/index";
 export type PillInput = {
   id: string;
@@ -27,26 +27,49 @@ export function createPill({
   };
 }
 
-export function createPillsFromNote(note: ExpandedNote): PillProps[] {
-  const { isPrivate, tags, category } = note;
-  const privatePills = isPrivate
-    ? [createPill({ id: "private", type: "isPrivate" })]
-    : [];
-  const tagPills =
-    tags?.map((tag) =>
-      createPill({
-        id: tag,
-        type: "tag",
-        path: `/search?q=${tag}&type=search&target=tags`,
-      })
-    ) ?? [];
-  const categoryPills =
+export function createCategoryPills({
+  category,
+}: Pick<ExpandedNote, "category">) {
+  return (
     category?.map((c) =>
       createPill({
         id: c,
         type: "category",
         path: `/search?q=${c}&type=search&target=category`,
       })
-    ) ?? [];
-  return [...privatePills, ...categoryPills, ...tagPills];
+    ) ?? []
+  );
+}
+
+export function createTagPills({ tags }: Pick<ExpandedNote, "tags">) {
+  return (
+    tags?.map((tag) =>
+      createPill({
+        id: tag,
+        type: "tag",
+        path: `/search?q=${tag}&type=search&target=tags`,
+      })
+    ) ?? []
+  );
+}
+
+export function createPillsFromNote(
+  note: ExpandedNote,
+  maxPillCount?: number
+): PillProps[] {
+  const { isPrivate } = note;
+  const privatePills = isPrivate
+    ? [createPill({ id: "private", type: "isPrivate" })]
+    : [];
+  const categoryPills = createCategoryPills(note);
+  const tagPills = createTagPills(note);
+
+  const pills = [...privatePills, ...categoryPills, ...tagPills];
+
+  if (maxPillCount && pills.length > maxPillCount) {
+    pills.splice(maxPillCount);
+    pills.push(createPill({ id: "...", type: "tag" }));
+  }
+
+  return pills;
 }
